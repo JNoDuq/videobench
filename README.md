@@ -5,7 +5,7 @@
 
 Video Bench is a tool that makes it easy to compare transcoded video files with a reference file (source)
 
-* Calculate VMAF and PSNR scores for test files
+* Calculates VMAF and PSNR scores for test files
 * Find the real video bitrate (size of the frames and not the size of the packets)
 * Give a by seconds or by frames views
 * Works with almost all video codecs (mpeg2, H264, HEVC, VP9, ...)
