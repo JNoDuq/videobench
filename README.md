@@ -118,6 +118,7 @@ python videobench_ui.py
 * If your tests files are not synchronize with the reference file you can set the sync time in seconds.
 * If your not sure about what sync time is excately the right one, you can set a sync windows. The analyzer will try to find the best sync time, starting by the sync time set and seraching in that windows.
 * Click on the start button for start the analyze, when it's done the information and the graph will be showed in the GUI.
+* I recommend doing measurements on short durations files (max 30 seconds), because the computation times can be quite long.
 * Generate the quality information can take some time, but when it's done all the information will be save in JSON files in the same folder than the video files.
 * You can directly import the JSON files in the GUI by using the "Import Measurements" button.
 
