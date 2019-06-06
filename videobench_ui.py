@@ -66,7 +66,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 				
 	def get_refFileName(self):
 
-		self.ref_path = QtWidgets.QFileDialog.getOpenFileName(self, ("Open Reference File"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 );; All files (*.*)"))[0]
+		self.ref_path = QtWidgets.QFileDialog.getOpenFileName(self, ("Open Reference File"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265);; All files (*.*)"))[0]
 		self.create_refCheckBox()
 
 	def create_refCheckBox(self): 
@@ -85,7 +85,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			self.refCheckbox_dict[filename].clicked.connect(partial(self.add_lineSeries, self.refCheckbox_dict[filename]))
 
 	def get_inputFileNames(self):
-		list_input = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Video files (*.mp4 *.ts *.ismv );; All files (*.*)"))[0]
+		list_input = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265);; All files (*.*)"))[0]
 
 		for input_file in list_input: 
 			if input_file not in self.inputPath_list:
@@ -94,7 +94,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		self.create_inputsCheckBox()
 
 	def get_jsondata_list(self):
-		list_json = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Json files (*.json );; All files (*.*)"))[0]
+		list_json = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Json files (*.json);; All files (*.*)"))[0]
 
 		for json in list_json:
 			if json not in self.jsonFilesNames :

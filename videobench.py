@@ -60,7 +60,7 @@ def manage_ref_file(ref_file):
 
 		print("-> {0} ".format(ref_obj.filename),flush=True)
 		print(" Bitrate  : {1} Mbps".format(ref_obj.filename, ref_obj.bitrate_avg),flush=True)
-		print(" r_framerate : {1}".format(ref_obj.filename, ref_obj.r_frame_rate),flush=True)
+		print(" avg_framerate : {1}".format(ref_obj.filename, ref_obj.avg_frame_rate),flush=True)
 		print(" interlaced : {1} ".format(ref_obj.filename, ref_obj.interlaced),flush=True)
 		
 		return ref_obj
@@ -127,7 +127,7 @@ def manage_input_files(all_input):
 
 		print("-> {0} ".format(input_obj.filename),flush=True)
 		print(" Bitrate : {1} Mbps".format(input_obj.filename, input_obj.bitrate_avg),flush=True)
-		print(" r_framerate : {1}".format(input_obj.filename, input_obj.r_frame_rate),flush=True)
+		print(" avg_framerate : {1}".format(input_obj.filename, input_obj.avg_frame_rate),flush=True)
 		print(" interlaced : {1} ".format(input_obj.filename, input_obj.interlaced),flush=True)
 
 

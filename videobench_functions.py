@@ -179,15 +179,16 @@ def set_reference_deint_old(ref_obj, input_obj):
 	elif ref_obj.interlaced == 0 :
 		input_obj.ref_deint = "null"
 
+
 def set_reference_deint(ref_obj, input_obj):
 
 
 	if ref_obj.interlaced == 1 and input_obj.interlaced == 0 :
 
-		if round(int(ref_obj.r_frame_rate)) == round(int(input_obj.r_frame_rate)*2) :
+		if round(int(ref_obj.avg_frame_rate)) == round(int(input_obj.avg_frame_rate)) :
 			input_obj.ref_deint = "yadif=0:-1:0"
 	
-		if round(int(ref_obj.r_frame_rate)) == round(int(input_obj.r_frame_rate)) :
+		if round(int(ref_obj.avg_frame_rate)*2) == round(int(input_obj.avg_frame_rate)) :
 			input_obj.ref_deint = "yadif=1:-1:0"
 
 	elif ref_obj.interlaced == 1 and input_obj.interlaced == 1:
@@ -195,6 +196,10 @@ def set_reference_deint(ref_obj, input_obj):
 
 	elif ref_obj.interlaced == 0 :
 		input_obj.ref_deint = "null"
+
+	else :
+		print("Unable to find the deinterlace filter for the ref file, please select one in settings", flush=True)
+		sys.exit()
 
 def set_subsampling(ref_obj, input_obj):
 
@@ -336,38 +341,6 @@ def make_quality_info(ref_obj, input_obj):
 		sync_time_str = "+{0}".format(str(sync_time))
 	else:
 		sync_time_str = str(sync_time)
-
-	'''
-	if input_obj.vmaf_model == "/usr/local/share/model/vmaf_v0.6.1.pkl" or input_obj.vmaf_model == "/usr/local/share/model/vmaf_v0.6.1.pkl:phone_model=1":
-	
-		if ref_obj.resolution[0] == 1920  and ref_obj.resolution[1] == 1080 :
-			ref_scale_filter = "null"
-			ref_obj.scale_filter = "null"
-		else:
-			ref_scale_filter = 'scale=1920:1080:flags={}'.format(input_obj.scale_filter)
-
-		if input_obj.resolution[0] == 1920  and input_obj.resolution[1] == 1080:
-			test_scale_filter = "null"
-			input_obj.scale_filter = "null"
-		else:
-			test_scale_filter = 'scale=1920:1080:flags={}'.format(input_obj.scale_filter)
-
-
-	if input_obj.vmaf_model == "/usr/local/share/model/vmaf_4k_v0.6.1.pkl":
-
-		if ref_obj.resolution[0] == 3840  and ref_obj.resolution[1] == 2160 :
-			ref_scale_filter = "null"
-			ref_obj.scale_filter = "null"
-		else:
-			ref_scale_filter = 'scale=3840:2160:flags={}'.format(input_obj.scale_filter)
-
-		if input_obj.resolution[0] == 3840  and input_obj.resolution[1] == 2160:
-			test_scale_filter = "null"
-			input_obj.scale_filter = "null"
-		else:
-			test_scale_filter = 'scale=3840:2160:flags={}'.format(input_obj.scale_filter)
-	
-	'''
 
 	print("",flush=True)
 	print("-> {0} ".format(input_obj.filename),flush=True)
