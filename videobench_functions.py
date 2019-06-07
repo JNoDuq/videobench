@@ -188,8 +188,12 @@ def set_reference_deint(ref_obj, input_obj):
 		if round(int(ref_obj.avg_frame_rate)) == round(int(input_obj.avg_frame_rate)) :
 			input_obj.ref_deint = "yadif=0:-1:0"
 	
-		if round(int(ref_obj.avg_frame_rate)*2) == round(int(input_obj.avg_frame_rate)) :
+		elif round(int(ref_obj.avg_frame_rate)*2) == round(int(input_obj.avg_frame_rate)) :
 			input_obj.ref_deint = "yadif=1:-1:0"
+
+		else :
+			print("Unable to find the deinterlace filter for the ref file, please select one in settings", flush=True)
+			exit()
 
 	elif ref_obj.interlaced == 1 and input_obj.interlaced == 1:
 		input_obj.ref_deint = "null"
@@ -199,7 +203,7 @@ def set_reference_deint(ref_obj, input_obj):
 
 	else :
 		print("Unable to find the deinterlace filter for the ref file, please select one in settings", flush=True)
-		sys.exit()
+		exit()
 
 def set_subsampling(ref_obj, input_obj):
 
