@@ -15,6 +15,7 @@ Video Bench is a tool that makes it easy to compare transcoded video files with 
 * Automatically scale the test files for matching the reference file
 * Automatically choose the right VMAF model (standard or 4k) depending of the reference file
 * Generate a JSON files compiling all the infos
+* Can export in PNG all graphics (with configurable resolution) 
 * Easy to install (need Docker and Python3 with the pyside2 library)
 * Run on Linux, Mac and windows
 * Has a GUI
