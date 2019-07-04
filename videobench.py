@@ -12,12 +12,12 @@ from videobench_functions import *
 tmp_path = "/tmp/videobench/"
 p = Pool(1)
 
-def manage_ref_file(ref_file):
+def manage_ref_file(ref_file, loglevel):
 		
 		ref_path, filename = os.path.split(ref_file)
 		copyfile(ref_file, tmp_path + filename) ################ copy ref file  to local tmp path
 
-		ffprobe_json = get_video_streams_info(filename) ############ get video file info 
+		ffprobe_json = get_video_streams_info(filename, loglevel) ############ get video file info 
 		ref_obj = videoFileInfos()
 		ref_obj.path = ref_path
 		ref_obj.filename = filename
@@ -35,7 +35,7 @@ def manage_ref_file(ref_file):
 		
 		ref_obj.resolution = [ffprobe_json['streams'][0]['width'], ffprobe_json['streams'][0]['height']]
 
-		make_packets_info(ref_obj) ############################################################################### Bitrate from packets
+		make_packets_info(ref_obj, loglevel) ############################################################################### Bitrate from packets
 		data_json = json.load(open("{0}packets_{1}.json".format(tmp_path, ref_obj.name)))
 		pkt_size_list = []
 		for i in range(len(data_json['packets'])):
@@ -45,7 +45,7 @@ def manage_ref_file(ref_file):
 				pass
 		ref_obj.pkt_size = pkt_size_list
 				
-		make_frames_info(ref_obj)
+		make_frames_info(ref_obj, loglevel)
 		data_json = json.load(open("{0}frames_{1}.json".format(tmp_path, ref_obj.name)))
 		interlaced_frame_list = []
 		ref_obj.frame_size = []
@@ -65,7 +65,7 @@ def manage_ref_file(ref_file):
 		
 		return ref_obj
 
-def manage_input_files(all_input):
+def manage_input_files(all_input, loglevel):
 
 	for input_list in all_input:
 		for input_file in input_list:
@@ -73,7 +73,7 @@ def manage_input_files(all_input):
 			input_path, filename = os.path.split(input_file) 
 			copyfile(input_file, tmp_path + filename) ################################## copy input file  to local tmp path
 
-			ffprobe_json = get_video_streams_info(filename) ############################ get video file info 
+			ffprobe_json = get_video_streams_info(filename, loglevel) ############################ get video file info 
 			input_obj = videoFileInfos()
 			input_obj.filename = filename
 			input_obj.path = input_path
@@ -96,8 +96,8 @@ def manage_input_files(all_input):
 	arguments = []
 	for input_obj in list_input_obj:
 		#arguments.append([input_obj])
-		make_packets_info(input_obj)
-		make_frames_info(input_obj)
+		make_packets_info(input_obj, loglevel)
+		make_frames_info(input_obj, loglevel)
 
 	#p.map(call_packets_info, arguments)
 	#p.map(call_frames_info, arguments)
@@ -148,6 +148,7 @@ if __name__ == '__main__':
 	parser.add_argument('-subsampling', dest='subsampling', default = "auto", help="Subsampling value (default=auto)" )
 	parser.add_argument('-scale', dest='scale', default = "neighbor", help="Scale filter flags (default=neighbor)" )
 	parser.add_argument('-vmaf_model', dest='vmaf_model', default = "auto", help="VMAF Model (default=auto)" )
+	parser.add_argument('-loglevel', dest='loglevel', default = "info", help="ffprobe/ffmpeg loglevel" )
 
 
 	args = parser.parse_args()
@@ -159,6 +160,7 @@ if __name__ == '__main__':
 	subsampling = args.subsampling
 	scale_filter = args.scale
 	vmaf_model = args.vmaf_model
+	loglevel = args.loglevel
 
 
 	os.makedirs(tmp_path, exist_ok=True)
@@ -166,13 +168,13 @@ if __name__ == '__main__':
 	if ref_file: ##################################################################### ref_file to ref_obj
 
 		print("* Analyzing Reference File...",flush=True)
-		ref_obj = manage_ref_file(ref_file)
+		ref_obj = manage_ref_file(ref_file, loglevel)
 
 	list_input_obj = [] ##################################################################### list_input_file to list_input_obj
 	if all_input:
 
 		print("* Analyzing tests Files...",flush=True)
-		list_input_obj = manage_input_files(all_input)
+		list_input_obj = manage_input_files(all_input, loglevel)
 
 		if sync_windows :
 			print("* Search sync values...",flush=True)
@@ -209,7 +211,7 @@ if __name__ == '__main__':
 			set_vmaf_model(ref_obj, input_obj)
 			set_scaling_filter(ref_obj, input_obj)
 			#arguments.append([ref_obj, input_obj])
-			make_quality_info(ref_obj, input_obj)
+			make_quality_info(ref_obj, input_obj, loglevel)
 		
 		#p.map(call_quality_info, arguments)
 		

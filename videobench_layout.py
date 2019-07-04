@@ -85,6 +85,7 @@ class Ui_fenetrePrincipale(object):
         self.scale_combobox.insertItem(9, "lanczos")
         self.scale_combobox.insertItem(10, "spline")
 
+
         self.vmaf_model_setting = QtWidgets.QLabel()
         self.vmaf_model_setting.setText("VMAF Model : ")
         self.vmaf_model_setting.setStyleSheet('QLabel {background-color: transparent;}')
@@ -94,6 +95,16 @@ class Ui_fenetrePrincipale(object):
         self.vmaf_model_combobox.insertItem(1, "vmaf_v0.6.1.pkl")
         self.vmaf_model_combobox.insertItem(2, "vmaf_v0.6.1.pkl:phone_model")
         self.vmaf_model_combobox.insertItem(3, "vmaf_4k_v0.6.1.pkl")
+
+
+        self.loglevel_setting = QtWidgets.QLabel()
+        self.loglevel_setting.setText("Loglevel : ")
+        self.loglevel_setting.setStyleSheet('QLabel {background-color: transparent;}')
+        self.loglevel_setting.setAlignment(QtCore.Qt.AlignRight)
+        self.loglevel_combobox = QtWidgets.QComboBox()
+        self.loglevel_combobox.insertItem(0, "quiet")
+        self.loglevel_combobox.insertItem(1, "info")
+
 
         self.png_resolution = QtWidgets.QLabel()
         self.png_resolution.setText("PNG Resolution : ")
@@ -126,8 +137,10 @@ class Ui_fenetrePrincipale(object):
         self.setting_grid.addWidget(self.deint_combobox, 2,1,1,1)
         self.setting_grid.addWidget(self.subsampling_setting, 3,0,1,1)
         self.setting_grid.addWidget(self.subsampling_combobox, 3,1,1,1)
-        self.setting_grid.addWidget(self.png_resolution, 4,0,1,1)
-        self.setting_grid.addLayout(self.png_resolution_hlayout, 4,1,1,1)
+        self.setting_grid.addWidget(self.loglevel_setting, 4,0,1,1)
+        self.setting_grid.addWidget(self.loglevel_combobox, 4,1,1,1)        
+        self.setting_grid.addWidget(self.png_resolution, 5,0,1,1)
+        self.setting_grid.addLayout(self.png_resolution_hlayout, 5,1,1,1)
 
 
     def widgets_and_layouts(self): 

@@ -593,6 +593,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		subsampling_setting = self.subsampling_combobox.currentText()
 		scale_setting = self.scale_combobox.currentText()
 		vmaf_model_setting =  self.vmaf_model_combobox.currentText()
+		loglevel = self.loglevel_combobox.currentText()
 
 		self.progressbar_step = 1
 		self.progressbar.setValue(self.progressbar_step)
@@ -619,7 +620,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		if not self.ref_path or self.ref_path == None  :
 			cmd = ("{0} -i {1}".format(self.videoAnalyzerPath, inputpath_list_str, sync, sw))
 		else:
-			cmd = ("{0} -ref {1} -i {2} -sync {3} -sw {4} -deint {5} -subsampling {6} -scale {7} -vmaf_model {8}".format(self.videoAnalyzerPath, self.ref_path, inputpath_list_str, sync, sw, deint_setting, subsampling_setting, scale_setting, vmaf_model_setting))
+			cmd = ("{0} -ref {1} -i {2} -sync {3} -sw {4} -deint {5} -subsampling {6} -scale {7} -vmaf_model {8} -loglevel {9}".format(self.videoAnalyzerPath, self.ref_path, inputpath_list_str, sync, sw, deint_setting, subsampling_setting, scale_setting, vmaf_model_setting, loglevel))
 			
 		self.te_operation.append("*****************************")
 		self.te_operation.append("STARTING VIDEO BENCH")
@@ -670,12 +671,13 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			status = (line[line.find("*")+len("*"):line.rfind("...")])
 			self.status_label.setText("<html><b>{}{}</b</html>".format(status,"..."))
 
-
-
 		if "->" in line :
 			step = line.count("->")
 			self.progressbar_step += step
 			self.progressbar.setValue(self.progressbar_step)
+
+		if "* Done!" in line :
+			self.progressbar.setValue(self.maxstepnumber)
 
 	def centered_windows(self):
 		rect = self.geometry()
