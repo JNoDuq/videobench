@@ -4,13 +4,16 @@ from subprocess import call
 from subprocess import Popen, PIPE
 import subprocess
 from functools import partial
+from datetime import datetime
 from PySide2 import QtGui, QtWidgets, QtCore
 from PySide2.QtCore import QPoint, Qt, QProcess
-from PySide2.QtGui import QPainter
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCharts import QtCharts
 from videobench_layout import Ui_fenetrePrincipale
 from videobench_functions import videoFileInfos
+
+import copy
+
 import json
 import time
 import re
@@ -63,6 +66,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		self.btn_reset.clicked.connect(self.reset_all)
 		self.radio_time.clicked.connect(self.switch_radio)
 		self.radio_frame.clicked.connect(self.switch_radio)
+		self.btn_export_png.clicked.connect(self.export_graph_png)
 				
 	def get_refFileName(self):
 
@@ -558,7 +562,6 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		##### results step
 		self.maxstepnumber = self.maxstepnumber + len(self.inputPath_list)
 
-
 	def popup_windows(self):
 
 		self.Fenetre_popup = QtWidgets.QWidget()
@@ -680,6 +683,37 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		windows_height = rect.height()
 		self.move(0.05*self.size.width(), 0.05*self.size.height())
 
+	def export_graph_png(self):
+		
+		self.png_path = QtWidgets.QFileDialog.getExistingDirectory()
+		png_time = format(datetime.now().strftime("%d%m%y_%H%M%S_"))
+		png_width = int(self.png_width.text())
+		png_height = int(self.png_height.text())
+
+
+		chart_dict = {
+		"VMAF_chart" : self.chartView_vmaf,
+		"PSNR_chart" : self.chartView_psnr,
+		"Bitrate_chart" : self.chartView_bitrate,
+		"VMAF_barchart" : self.barChartView_vmaf,
+		"PSNR_barchart" : self.barChartView_psnr,
+		"Bitrate_barchart" : self.barChartView_bitrate
+		}
+
+
+		for chart_name, chart in chart_dict.items():
+
+			myPixmap = QtGui.QPixmap(png_width, png_height)
+			chart.chart().setAnimationOptions(QtCharts.QChart.NoAnimation)
+			rect_width = chart.geometry().width()
+			rect_height = chart.geometry().height()
+			chart.resize(png_width, png_height)
+			chart.render(myPixmap)
+			chart.resize(rect_width,rect_height)
+			chart.chart().setAnimationOptions(QtCharts.QChart.AllAnimations)
+			myPixmap.save(self.png_path+"/{}{}.png".format(png_time, chart_name), "PNG")
+
+
 	def update_ui(self):
 
 		self.status_label.setText("<html><b>{}</b</html>".format("Done!"))
@@ -699,6 +733,9 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		self.check_init()
 		self.setEnabled(True)
 		self.centered_windows()
+		self.add_export_png_btn()
+		
+
 
 	def check_init(self):
 
@@ -738,6 +775,12 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			self.remove_txtbox()
 		except:
 			pass
+
+		try:
+			self.remove_export_png_btn()
+		except:
+			pass
+
 
 		self.reset_init_values()
 

@@ -95,6 +95,28 @@ class Ui_fenetrePrincipale(object):
         self.vmaf_model_combobox.insertItem(2, "vmaf_v0.6.1.pkl:phone_model")
         self.vmaf_model_combobox.insertItem(3, "vmaf_4k_v0.6.1.pkl")
 
+        self.png_resolution = QtWidgets.QLabel()
+        self.png_resolution.setText("PNG Resolution : ")
+        self.png_resolution.setStyleSheet('QLabel {background-color: transparent;}')
+        self.png_resolution.setAlignment(QtCore.Qt.AlignRight)
+        self.png_resolution_hlayout = QtWidgets.QHBoxLayout()
+        self.png_resolution_hlayout.setAlignment(QtCore.Qt.AlignLeft)
+        self.png_width = QtWidgets.QLineEdit()
+        self.png_width.setAlignment(QtCore.Qt.AlignRight)
+        self.png_width.setMaximumWidth(150)
+        self.png_width.setText("1280")
+        self.png_ = QtWidgets.QLabel()
+        self.png_.setStyleSheet('QLabel {background-color: transparent;}')
+        self.png_.setAlignment(QtCore.Qt.AlignLeft)
+        self.png_.setMaximumWidth(10)
+        self.png_.setText(" : ")
+        self.png_height = QtWidgets.QLineEdit()
+        self.png_height.setAlignment(QtCore.Qt.AlignRight)
+        self.png_height.setMaximumWidth(150)
+        self.png_height.setText("720")
+        self.png_resolution_hlayout.addWidget(self.png_width)
+        self.png_resolution_hlayout.addWidget(self.png_)
+        self.png_resolution_hlayout.addWidget(self.png_height)
 
         self.setting_grid.addWidget(self.vmaf_model_setting, 0,0,1,1)
         self.setting_grid.addWidget(self.vmaf_model_combobox, 0,1,1,1)
@@ -104,7 +126,8 @@ class Ui_fenetrePrincipale(object):
         self.setting_grid.addWidget(self.deint_combobox, 2,1,1,1)
         self.setting_grid.addWidget(self.subsampling_setting, 3,0,1,1)
         self.setting_grid.addWidget(self.subsampling_combobox, 3,1,1,1)
-
+        self.setting_grid.addWidget(self.png_resolution, 4,0,1,1)
+        self.setting_grid.addLayout(self.png_resolution_hlayout, 4,1,1,1)
 
 
     def widgets_and_layouts(self): 
@@ -215,6 +238,10 @@ class Ui_fenetrePrincipale(object):
         self.btn_reset.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_reset.setMinimumSize(0.04*self.size.width() , 0.04*self.size.height())
 
+        self.btn_export_png = QtWidgets.QPushButton("Export PNG")
+        self.btn_export_png.setStyleSheet('QPushButton:hover {background-color: #007bff; color: #ffffff; font-size: 15px; } QPushButton {color: #007bff; border:2px solid #007bff; background-color: transparent;  border-radius: 4px;}')
+        self.btn_export_png.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_export_png.setMinimumSize(0.04*self.size.width() , 0.04*self.size.height())
 
         self.inputs_column_widget = QtWidgets.QWidget()
         self.inputs_column_widget.setLayout(self.inputs_column_Layout)
@@ -342,6 +369,12 @@ class Ui_fenetrePrincipale(object):
 
     def remove_reset_btn(self):
         self.btn_reset.setParent(None)
+
+    def add_export_png_btn(self):
+        self.startLayout.insertWidget(0, self.btn_export_png)
+
+    def remove_export_png_btn(self):
+        self.btn_export_png.setParent(None)
 
     def add_Chart(self):
         self.HSplitter.addWidget(self.chartVSplitter)
