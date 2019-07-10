@@ -22,7 +22,7 @@ Video Bench is a tool that makes it easy to compare transcoded video files with 
 * Can be used in commande line 
 
 
-![Video Bench](https://user-images.githubusercontent.com/10562413/57775568-a0f9e780-771d-11e9-8b19-17a0a0b5cd25.png)
+![Video Bench](https://user-images.githubusercontent.com/10562413/60960089-a6cd0d00-a309-11e9-81a7-ca8655547e7d.png)
 
 
 ## How to install
