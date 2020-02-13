@@ -20,7 +20,7 @@ RUN \
 	&& git clone https://github.com/Netflix/vmaf.git . \
 	&& make \
 	&& make install \
-	&& rm -r /tmp/vmaf
+        && rm -r /tmp/vmaf
 
 
 RUN \
@@ -28,7 +28,7 @@ RUN \
 	&& mkdir /tmp/ffmpeg \
 	&& cd /tmp/ffmpeg \
 	&& git clone https://git.ffmpeg.org/ffmpeg.git . \
-	&& ./configure --enable-libvmaf --enable-version3 \
+	&& ./configure --enable-libvmaf --enable-version3 --pkg-config-flags="--static" \
 	&& make -j 8 install \
 	&& rm -r /tmp/ffmpeg
 
@@ -36,3 +36,6 @@ RUN \
 
 RUN \
 	mkdir -p /home/shared-vmaf
+
+RUN \
+        ldconfig
