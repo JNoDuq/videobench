@@ -314,7 +314,7 @@ def find_sync_values (ref_obj, input_obj, sync, sw):
 
 def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 
-	cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 3 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[ref][c]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename, sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))		
+	cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 3 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[ref][c]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, input_obj.filename, ref_obj.filename, sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
 
 	psnr_raw = (subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)).decode('utf-8')
 	psnr_list =  psnr_raw.split(" ")
@@ -368,7 +368,7 @@ def make_quality_info(ref_obj, input_obj, loglevel):
 	print("",flush=True)
 
 
-	cmd = (''' {0} ffmpeg -y -loglevel {14} -stats -i {1}{2} -i {1}{3} -lavfi "[0]{10}[refdeint];[refdeint]{12}[ref];[1]setpts=PTS{4}/TB[b];[b]{13}[c];[ref][c]libvmaf='log_fmt=json:psnr=1:model_path={7}:n_subsample={8}:log_path={1}quality_{9}.json'" -f null - ''').format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename, sync_time_str, ref_obj.resolution[0], ref_obj.resolution[1], input_obj.vmaf_model, input_obj.n_subsample, input_obj.name, input_obj.ref_deint, input_obj.scale_filter, ref_obj.scale_filter, input_obj.scale_filter, loglevel)
+	cmd = (''' {0} ffmpeg -y -loglevel {14} -stats -i {1}{2} -i {1}{3} -lavfi "[0]{10}[refdeint];[refdeint]{12}[ref];[1]setpts=PTS{4}/TB[b];[b]{13}[c];[ref][c]libvmaf='log_fmt=json:psnr=1:model_path={7}:n_subsample={8}:log_path={1}quality_{9}.json'" -f null - ''').format(docker_cmd, container_tmp_path, input_obj.filename, ref_obj.filename, sync_time_str, ref_obj.resolution[0], ref_obj.resolution[1], input_obj.vmaf_model, input_obj.n_subsample, input_obj.name, input_obj.ref_deint, input_obj.scale_filter, ref_obj.scale_filter, input_obj.scale_filter, loglevel)
 
 	if loglevel == "info":
 		print(cmd, flush=True)
