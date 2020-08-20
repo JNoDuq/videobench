@@ -262,43 +262,28 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		for obj in self.list_obj:
 			if obj.name == name:
 
-				self.axisX = QtCharts.QValueAxis()
-				self.axisY = QtCharts.QValueAxis()
+				self.chart_vmaf.addSeries(self.vmafls_dict[obj.filename])
+				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_vmaf.createDefaultAxes()
 
-				
-				try:
-					self.chart_vmaf.addSeries(self.vmafls_dict[obj.filename])
-					self.chart_vmaf.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-					self.chart_vmaf.addAxis(self.axisY, QtCore.Qt.AlignLeft)
-					self.chart_vmaf.createDefaultAxes()
-				except:
-					pass
+				self.chart_psnr.addSeries(self.psnrls_dict[obj.filename])
+				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_psnr.createDefaultAxes()
 
-				try:	
-					self.chart_psnr.addSeries(self.psnrls_dict[obj.filename])
-					self.chart_psnr.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-					self.chart_psnr.addAxis(self.axisY, QtCore.Qt.AlignLeft)
-					self.chart_psnr.createDefaultAxes()
-				except:
-					pass
-				
-				try:	
-					self.chart_bitrate.addSeries(self.bitratels_dict[obj.filename])
-					self.chart_bitrate.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-					self.chart_bitrate.addAxis(self.axisY, QtCore.Qt.AlignLeft)
-					self.chart_bitrate.createDefaultAxes()
-				except:
-					pass
-				
+				self.chart_bitrate.addSeries(self.bitratels_dict[obj.filename])
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_bitrate.createDefaultAxes()
+
 		if self.ref_path != None :
 			if self.ref_obj.filename ==  input_widget.objectName():
 
 				self.chart_bitrate.addSeries(self.ref_bitrate_ls)
 
-				self.axisX = QtCharts.QValueAxis()
-				self.axisY = QtCharts.QValueAxis()
-				self.chart_bitrate.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-				self.chart_bitrate.addAxis(self.axisY, QtCore.Qt.AlignLeft)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 				self.chart_bitrate.createDefaultAxes()
 
 	def remove_lineSeries_seconds(self, input_widget):
@@ -340,32 +325,20 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		for obj in self.list_obj:
 			if obj.name == name:
 
-				self.axisX_vmaf = QtCharts.QValueAxis()
-				self.axisY_vmaf = QtCharts.QValueAxis()
-				
-				try:
-					self.chart_vmaf.addSeries(self.vmafls_frame_dict[obj.filename])
-					self.chart_vmaf.addAxis(self.axisX_vmaf, QtCore.Qt.AlignBottom)
-					self.chart_vmaf.addAxis(self.axisY_vmaf, QtCore.Qt.AlignLeft)
-					self.chart_vmaf.createDefaultAxes()
-				except:
-					pass
-				
-				try:
-					self.chart_psnr.addSeries(self.psnrls_frame_dict[obj.filename])
-					self.chart_psnr.addAxis(self.axisX_vmaf, QtCore.Qt.AlignBottom)
-					self.chart_psnr.addAxis(self.axisY_vmaf, QtCore.Qt.AlignLeft)
-					self.chart_psnr.createDefaultAxes()
-				except:
-					pass
-				
-				try:
-					self.chart_bitrate.addSeries(self.bitratels_frame_dict[obj.filename])
-					self.chart_bitrate.addAxis(self.axisX_vmaf, QtCore.Qt.AlignBottom)
-					self.chart_bitrate.addAxis(self.axisY_vmaf, QtCore.Qt.AlignLeft)
-					self.chart_bitrate.createDefaultAxes()
-				except:
-					pass
+				self.chart_vmaf.addSeries(self.vmafls_frame_dict[obj.filename])
+				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_vmaf.createDefaultAxes()
+
+				self.chart_psnr.addSeries(self.psnrls_frame_dict[obj.filename])
+				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_psnr.createDefaultAxes()
+
+				self.chart_bitrate.addSeries(self.bitratels_frame_dict[obj.filename])
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+				self.chart_bitrate.createDefaultAxes()
 
 
 		if self.ref_path != None :
@@ -373,10 +346,8 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 				self.chart_bitrate.addSeries(self.ref_bitrate_frame_ls)
 
-				self.axisX = QtCharts.QValueAxis()
-				self.axisY = QtCharts.QValueAxis()
-				self.chart_bitrate.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-				self.chart_bitrate.addAxis(self.axisY, QtCore.Qt.AlignLeft)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 				self.chart_bitrate.createDefaultAxes()
 
 	def remove_lineSeries_frames(self, input_widget):
@@ -503,19 +474,16 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		self.barChart_psnr.addSeries(self.psnr_barSeries)
 		self.barChart_bitrate.addSeries(self.bitrate_barSeries)
 
-		self.axisX = QtCharts.QValueAxis()
-		self.axisY = QtCharts.QValueAxis()
-
-		self.barChart_vmaf.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-		self.barChart_vmaf.addAxis(self.axisY, QtCore.Qt.AlignLeft)
+		self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+		self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 		self.barChart_vmaf.createDefaultAxes()
 
-		self.barChart_psnr.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-		self.barChart_psnr.addAxis(self.axisY, QtCore.Qt.AlignLeft)
+		self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+		self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 		self.barChart_psnr.createDefaultAxes()
 
-		self.barChart_bitrate.addAxis(self.axisX, QtCore.Qt.AlignBottom)
-		self.barChart_bitrate.addAxis(self.axisY, QtCore.Qt.AlignLeft)
+		self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+		self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 		self.barChart_bitrate.createDefaultAxes()
 
 	def remove_all_barSeries(self):
