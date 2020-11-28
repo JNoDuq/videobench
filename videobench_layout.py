@@ -12,10 +12,8 @@ class Ui_fenetrePrincipale(object):
         self.gridLayout = QtWidgets.QGridLayout(mainWindow)
         self.tabwidget = QtWidgets.QTabWidget()
         self.HSplitter = QtWidgets.QSplitter()
-
         self.gridLayout.addWidget(self.tabwidget, 0, 1, 1, 1)
         self.tabwidget.addTab(self.HSplitter, "General")
-        
 
         self.widgets_and_layouts()
         self.setting_widget()
@@ -275,7 +273,7 @@ class Ui_fenetrePrincipale(object):
         self.chartView_psnr = QtCharts.QChartView(self.chart_psnr)
         self.chartView_psnr.setRenderHint(QPainter.Antialiasing)    
 
-        self.chart_bitrate = self.create_chart("Bitrate")
+        self.chart_bitrate = self.create_chart("Bitrate Kbps")
         self.chartView_bitrate = QtCharts.QChartView(self.chart_bitrate)
         self.chartView_bitrate.setRenderHint(QPainter.Antialiasing)
 
@@ -294,7 +292,7 @@ class Ui_fenetrePrincipale(object):
         self.barChartView_psnr = QtCharts.QChartView(self.barChart_psnr)
         self.barChartView_psnr.setRenderHint(QPainter.Antialiasing) 
 
-        self.barChart_bitrate = self.create_chart("Bitrate")
+        self.barChart_bitrate = self.create_chart("Bitrate Kbps")
         self.barChartView_bitrate = QtCharts.QChartView(self.barChart_bitrate)
         self.barChartView_bitrate.setRenderHint(QPainter.Antialiasing)
 
