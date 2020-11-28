@@ -10,7 +10,7 @@ from multiprocessing import Pool
 from videobench_functions import *
 
 tmp_path = "/tmp/videobench/"
-p = Pool(1)
+#p = Pool(1)
 
 def manage_ref_file(ref_file, loglevel):
 		
@@ -52,7 +52,7 @@ def manage_ref_file(ref_file, loglevel):
 		for i in range(len(data_json['frames'])):
 			try:
 				interlaced_frame_list.append(int(data_json['frames'][i]["interlaced_frame"]))
-				ref_obj.frame_size.append(int(data_json['frames'][i]["pkt_size"])*8/1000/1000)
+				ref_obj.frame_size.append(int(data_json['frames'][i]["pkt_size"])*8/1000)
 			except Exception:
 				pass
 		ref_obj.interlaced = round(sum(interlaced_frame_list)/len(interlaced_frame_list))
@@ -118,7 +118,7 @@ def manage_input_files(all_input, loglevel):
 		for i in range(len(data_json['frames'])):
 			try:
 				interlaced_frame_list.append(int(data_json['frames'][i]["interlaced_frame"]))
-				input_obj.frame_size.append(int(data_json['frames'][i]["pkt_size"])*8/1000/1000)
+				input_obj.frame_size.append(int(data_json['frames'][i]["pkt_size"])*8/1000)
 			except Exception:
 				pass
 		input_obj.interlaced = round(sum(interlaced_frame_list)/len(interlaced_frame_list))

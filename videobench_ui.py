@@ -26,7 +26,6 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 		self.screen = screen
 		self.setWindowTitle('Video Bench')
-		self.setStyleSheet("background-color:white");
 		self.screen_infos()
 		self.setupUi(self)
 		self.Init_values()
@@ -262,20 +261,29 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		for obj in self.list_obj:
 			if obj.name == name:
 
-				self.chart_vmaf.addSeries(self.vmafls_dict[obj.filename])
-				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_vmaf.createDefaultAxes()
+				try:
+					self.chart_vmaf.addSeries(self.vmafls_dict[obj.filename])
+					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_vmaf.createDefaultAxes()
+				except:	
+					pass
 
-				self.chart_psnr.addSeries(self.psnrls_dict[obj.filename])
-				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_psnr.createDefaultAxes()
+				try:
+					self.chart_psnr.addSeries(self.psnrls_dict[obj.filename])
+					self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_psnr.createDefaultAxes()
+				except:	
+					pass
 
-				self.chart_bitrate.addSeries(self.bitratels_dict[obj.filename])
-				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_bitrate.createDefaultAxes()
+				try:
+					self.chart_bitrate.addSeries(self.bitratels_dict[obj.filename])
+					self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_bitrate.createDefaultAxes()
+				except:	
+					pass
 
 		if self.ref_path != None :
 			if self.ref_obj.filename ==  input_widget.objectName():
@@ -325,20 +333,29 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		for obj in self.list_obj:
 			if obj.name == name:
 
-				self.chart_vmaf.addSeries(self.vmafls_frame_dict[obj.filename])
-				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_vmaf.createDefaultAxes()
+				try:
+					self.chart_vmaf.addSeries(self.vmafls_frame_dict[obj.filename])
+					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_vmaf.createDefaultAxes()
+				except:	
+					pass
 
-				self.chart_psnr.addSeries(self.psnrls_frame_dict[obj.filename])
-				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_psnr.createDefaultAxes()
+				try:
+					self.chart_psnr.addSeries(self.psnrls_frame_dict[obj.filename])
+					self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_psnr.createDefaultAxes()
+				except:	
+					pass
 
-				self.chart_bitrate.addSeries(self.bitratels_frame_dict[obj.filename])
-				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-				self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-				self.chart_bitrate.createDefaultAxes()
+				try:
+					self.chart_bitrate.addSeries(self.bitratels_frame_dict[obj.filename])
+					self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+					self.chart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+					self.chart_bitrate.createDefaultAxes()
+				except:	
+					pass
 
 
 		if self.ref_path != None :
@@ -470,21 +487,33 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 	def add_barSeries(self):
 
-		self.barChart_vmaf.addSeries(self.vmaf_barSeries)
-		self.barChart_psnr.addSeries(self.psnr_barSeries)
-		self.barChart_bitrate.addSeries(self.bitrate_barSeries)
+		try:
+			self.barChart_vmaf.addSeries(self.vmaf_barSeries)
+			self.barChart_psnr.addSeries(self.psnr_barSeries)
+			self.barChart_bitrate.addSeries(self.bitrate_barSeries)
+		except:
+			pass
 
-		self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-		self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-		self.barChart_vmaf.createDefaultAxes()
+		try:
+			self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+			self.barChart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+			self.barChart_vmaf.createDefaultAxes()
+		except:
+			pass
 
-		self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-		self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-		self.barChart_psnr.createDefaultAxes()
+		try:
+			self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+			self.barChart_psnr.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+			self.barChart_psnr.createDefaultAxes()
+		except:
+			pass
 
-		self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
-		self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
-		self.barChart_bitrate.createDefaultAxes()
+		try:
+			self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
+			self.barChart_bitrate.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
+			self.barChart_bitrate.createDefaultAxes()
+		except:
+			pass
 
 	def remove_all_barSeries(self):
 		
@@ -533,7 +562,6 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 	def popup_windows(self):
 
 		self.Fenetre_popup = QtWidgets.QWidget()
-		self.Fenetre_popup.setStyleSheet("background-color:white");
 		self.Fenetre_popup.setMinimumSize(0.3*self.size.width() , 0.25*self.size.height())
 		
 		self.te_operation = QtWidgets.QTextEdit()
