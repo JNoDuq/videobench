@@ -123,7 +123,7 @@ python videobench_ui.py
 * Generate the quality information can take some time, but when it's done all the information will be save in JSON files in the same folder than the video files.
 * You can directly import the JSON files in the GUI by using the "Import Measurements" button.
 
-For more information read the article on [Video Bench](https://medium.com/@jnoduq/video-bench-how-measure-your-video-quality-easily-85a0feb8f6e2)
+For more information read the article on [VideoBench](https://jnduquesne.medium.com/video-bench-how-measure-your-video-quality-easily-85a0feb8f6e2)
 
 ### Using the command line
 
