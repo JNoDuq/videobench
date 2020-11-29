@@ -172,7 +172,8 @@ if __name__ == '__main__':
 		ref_obj = manage_ref_file(ref_file, loglevel)
 
 	list_input_obj = [] ##################################################################### list_input_file to list_input_obj
-	if all_input:
+
+	if all_input and all_input != [['']]:
 
 		print("* Analyzing tests Files...",flush=True)
 		list_input_obj = manage_input_files(all_input, loglevel)
