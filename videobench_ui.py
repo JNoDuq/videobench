@@ -25,7 +25,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		super(VideoAnalyzer, self).__init__()
 
 		self.screen = screen
-		self.setWindowTitle('Video Bench')
+		self.setWindowTitle('VideoBench')
 		self.screen_infos()
 		self.setupUi(self)
 		self.Init_values()
@@ -38,7 +38,8 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 	def Init_values(self):
 		self.currentPath = os.path.dirname(__file__)
-		self.videoAnalyzerPath ="python3 " + os.path.dirname(os.path.abspath(__file__)) + "/videobench.py"
+		self.python_path = "python3"
+		self.videoAnalyzerPath = os.path.dirname(os.path.abspath(__file__)) + "/videobench.py"
 		self.list_obj=[]
 		self.jsonFilesNames = []
 		self.refCheckbox_dict = {}
@@ -614,20 +615,27 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 
 		if not self.ref_path or self.ref_path == None  :
-			cmd = ("{0} -i {1}".format(self.videoAnalyzerPath, inputpath_list_str, sync, sw))
+			#cmd = ("{0} -i {1}".format(self.videoAnalyzerPath, inputpath_list_str, sync, sw))
+			cmd = ("{0} -i {1} -loglevel {2}".format(self.videoAnalyzerPath, inputpath_list_str, loglevel))
+			cmd_list = cmd.split(" ") 
 		else:
 			cmd = ("{0} -ref {1} -i {2} -sync {3} -sw {4} -deint {5} -subsampling {6} -scale {7} -vmaf_model {8} -loglevel {9}".format(self.videoAnalyzerPath, self.ref_path, inputpath_list_str, sync, sw, deint_setting, subsampling_setting, scale_setting, vmaf_model_setting, loglevel))
-			
+			cmd_list = cmd.split(" ") 
+		
 		self.te_operation.append("*****************************")
 		self.te_operation.append("STARTING VIDEO BENCH")
-		self.te_operation.append(cmd)
+		self.te_operation.append(self.python_path + " " + cmd)
 		self.te_operation.append("*****************************")
+
 
 		process = QtCore.QProcess()
 		process.setProcessChannelMode(QtCore.QProcess.MergedChannels)
 		process.readyReadStandardOutput.connect(partial(self.dataReady, process))
 		process.finished.connect(self.update_ui)
-		process.start(cmd)
+		process.setProgram(self.videoAnalyzerPath)
+		process.start(self.python_path, cmd_list)
+
+
 
 		self.setDisabled(True)
 
