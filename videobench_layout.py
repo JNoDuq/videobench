@@ -418,6 +418,9 @@ class Ui_fenetrePrincipale(object):
         self.barVSplitter.addWidget(self.barChartView_vmaf)
         self.barVSplitter.addWidget(self.barChartView_psnr)
         self.barVSplitter.addWidget(self.barChartView_bitrate)
+        self.label = QtWidgets.QLabel()
+        self.label.setMargin(11)
+        self.barVSplitter.addWidget(self.label)
 
     def remove_BarChart(self):
         self.barChartView_vmaf.setParent(None)
