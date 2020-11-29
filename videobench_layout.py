@@ -146,12 +146,12 @@ class Ui_fenetrePrincipale(object):
         self.inputs_column_Layout = QtWidgets.QVBoxLayout() 
 
         self.inputs_btn_Layout = QtWidgets.QHBoxLayout()  ########################################### Imports Butons 
-        self.btn_importRef = QtWidgets.QPushButton("Import Video")
+        self.btn_importRef = QtWidgets.QPushButton(" Import Video ")
         self.btn_importRef.setMinimumSize(0.06*self.size.width() , 0.04*self.size.height())
         self.btn_importRef.setStyleSheet('QPushButton:hover {background-color: #007bff; color: #ffffff; font-size: 15px; } QPushButton {color: #007bff; border:2px solid #007bff; background-color: transparent;  border-radius: 4px;}')
         self.btn_importRef.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-        self.btn_importInputs = QtWidgets.QPushButton("Import Video")
+        self.btn_importInputs = QtWidgets.QPushButton(" Import Video ")
         self.btn_importInputs.setMinimumSize(0.06*self.size.width() , 0.04*self.size.height())
         self.btn_importInputs.setStyleSheet('QPushButton:hover {background-color: #007bff; color: #ffffff; font-size: 15px; } QPushButton {color: #007bff; border:2px solid #007bff; background-color: transparent;  border-radius: 4px;}')
         self.btn_importInputs.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -160,7 +160,7 @@ class Ui_fenetrePrincipale(object):
         self.label_or.setText("or")
         self.label_or.setStyleSheet('QLabel {background-color: transparent;}')
 
-        self.import_json_btn = QtWidgets.QPushButton("Import Measurements")
+        self.import_json_btn = QtWidgets.QPushButton(" Import Measurements ")
         self.import_json_btn.setMinimumSize(0.06*self.size.width() , 0.04*self.size.height())
         self.import_json_btn.setStyleSheet('QPushButton:hover {background-color: #007bff; color: #ffffff; font-size: 15px; } QPushButton {color: #007bff; border:2px solid #007bff; background-color: transparent;  border-radius: 4px;}')
         self.import_json_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
