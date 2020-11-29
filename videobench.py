@@ -1,5 +1,6 @@
-from sys import argv
+#!/usr/local/bin/python3
 
+from sys import argv
 import sys
 import argparse
 import os
@@ -59,7 +60,7 @@ def manage_ref_file(ref_file, loglevel):
 		ref_obj.bitrate_avg = round(sum(ref_obj.get_mbps())/len(ref_obj.get_mbps()),2)
 
 		print("-> {0} ".format(ref_obj.filename),flush=True)
-		print(" Bitrate  : {1} Mbps".format(ref_obj.filename, ref_obj.bitrate_avg),flush=True)
+		print(" Bitrate  : {1} Mbps".format(ref_obj.filename, round(ref_obj.bitrate_avg/1000,2)),flush=True)
 		print(" avg_framerate : {1}".format(ref_obj.filename, ref_obj.avg_frame_rate),flush=True)
 		print(" interlaced : {1} ".format(ref_obj.filename, ref_obj.interlaced),flush=True)
 		
@@ -126,7 +127,7 @@ def manage_input_files(all_input, loglevel):
 
 
 		print("-> {0} ".format(input_obj.filename),flush=True)
-		print(" Bitrate : {1} Mbps".format(input_obj.filename, input_obj.bitrate_avg),flush=True)
+		print(" Bitrate : {1} Mbps".format(input_obj.filename, round(input_obj.bitrate_avg/1000,2)),flush=True)
 		print(" avg_framerate : {1}".format(input_obj.filename, input_obj.avg_frame_rate),flush=True)
 		print(" interlaced : {1} ".format(input_obj.filename, input_obj.interlaced),flush=True)
 

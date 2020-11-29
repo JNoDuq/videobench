@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3
+
 import os
 import sys
 from subprocess import call
@@ -11,9 +13,7 @@ from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCharts import QtCharts
 from videobench_layout import Ui_fenetrePrincipale
 from videobench_functions import videoFileInfos
-
 import copy
-
 import json
 import time
 import re
