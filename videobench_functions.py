@@ -222,21 +222,21 @@ def set_vmaf_model(ref_obj, input_obj):
 		if ref_obj.resolution[0] > 1920: ############################################### VMAF Model
 			input_obj.vmaf_model = '/usr/local/share/model/vmaf_4k_v0.6.1.pkl'
 		else:
-			input_obj.vmaf_model = '/usr/local/share/model/vmaf_v0.6.1.pkl'
+			input_obj.vmaf_model = '/usr/local/share/model/vmaf_float_v0.6.1.pkl'
 
-	elif input_obj.vmaf_model == "vmaf_v0.6.1.pkl":
-		input_obj.vmaf_model = '/usr/local/share/model/vmaf_v0.6.1.pkl'
+	elif input_obj.vmaf_model == "vmaf_float_v0.6.1.pkl":
+		input_obj.vmaf_model = '/usr/local/share/model/vmaf_float_v0.6.1.pkl'
 
 	elif input_obj.vmaf_model == "vmaf_4k_v0.6.1.pkl":
 		input_obj.vmaf_model = '/usr/local/share/model/vmaf_4k_v0.6.1.pkl'
 
-	elif input_obj.vmaf_model == "vmaf_v0.6.1.pkl:phone_model":
-		input_obj.vmaf_model = '/usr/local/share/model/vmaf_v0.6.1.pkl:phone_model=1'
+	elif input_obj.vmaf_model == "vmaf_float_v0.6.1.pkl:phone_model":
+		input_obj.vmaf_model = '/usr/local/share/model/vmaf_float_v0.6.1.pkl:phone_model=1'
 
 
 def set_scaling_filter(ref_obj, input_obj):
 
-	if input_obj.vmaf_model == "/usr/local/share/model/vmaf_v0.6.1.pkl" or input_obj.vmaf_model == "/usr/local/share/model/vmaf_v0.6.1.pkl:phone_model=1":
+	if input_obj.vmaf_model == "/usr/local/share/model/vmaf_float_v0.6.1.pkl" or input_obj.vmaf_model == "/usr/local/share/model/vmaf_float_v0.6.1.pkl:phone_model=1":
 	
 		if ref_obj.resolution[0] == 1920  and ref_obj.resolution[1] == 1080 :
 			ref_obj.scale_filter = "null"
