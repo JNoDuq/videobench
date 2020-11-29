@@ -161,7 +161,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			else :
 				interlaced = "No"
 		
-			ref_str = "{} : \n * Codec Name : {}\n * Resolution : {}:{}\n * Scale Filter : {}\n * Video Bitrate : {}Mbps \n * Framerate : {}\n * Interlaced : {}\n\n".format(self.ref_obj.filename, self.ref_obj.codec_name, self.ref_obj.resolution[0], self.ref_obj.resolution[1], self.ref_obj.scale_filter,  self.ref_obj.bitrate_avg, self.ref_obj.avg_frame_rate, interlaced)
+			ref_str = "{} : \n * Codec Name : {}\n * Resolution : {}:{}\n * Scale Filter : {}\n * Video Bitrate : {}Mbps \n * Framerate : {}\n * Interlaced : {}\n\n".format(self.ref_obj.filename, self.ref_obj.codec_name, self.ref_obj.resolution[0], self.ref_obj.resolution[1], self.ref_obj.scale_filter,  round(self.ref_obj.bitrate_avg/1000,2), self.ref_obj.avg_frame_rate, interlaced)
 			#self.ref_txt.setText(ref_str)
 			self.input_txt.append("REFERENCE FILE :")
 			self.input_txt.append("-----------------\n")
@@ -182,7 +182,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 				vmaf_model = None
 
 			#input_str+= "{} : \n * Resolution : {}:{}\n * Video Bitrate : {}Mbps \n * Framerate : {}\n * Interlaced : {}\n * Best Sync : {}\n * Ref. File : {}\n * Ref. Deint. filter : {}\n * VMAF Model : {}\n * VMAF : {}\n * PSNR : {}\n\n".format(obj.filename, obj.resolution[0], obj.resolution[1],  obj.bitrate_avg, obj.avg_frame_rate, interlaced, obj.sync, obj.ref_file, obj.ref_deint ,vmaf_model , obj.vmaf_avg, obj.psnr_avg)
-			input_str= "{} : \n * Codec Name : {}\n * Resolution : {}:{}\n * Video Bitrate : {}Mbps \n * Framerate : {}\n * Interlaced : {}\n * Best Sync : {}\n * Ref. File : {}\n * Ref. Deint. filter : {}\n * Scale filter : {}\n * VMAF Model : {}\n * VMAF : {}\n * PSNR : {}\n".format(obj.filename, obj.codec_name, obj.resolution[0], obj.resolution[1],  obj.bitrate_avg, obj.avg_frame_rate, interlaced, obj.sync, obj.ref_file, obj.ref_deint ,obj.scale_filter, vmaf_model , obj.vmaf_avg, obj.psnr_avg)
+			input_str= "{} : \n * Codec Name : {}\n * Resolution : {}:{}\n * Video Bitrate : {}Mbps \n * Framerate : {}\n * Interlaced : {}\n * Best Sync : {}\n * Ref. File : {}\n * Ref. Deint. filter : {}\n * Scale filter : {}\n * VMAF Model : {}\n * VMAF : {}\n * PSNR : {}\n".format(obj.filename, obj.codec_name, obj.resolution[0], obj.resolution[1],  round(obj.bitrate_avg/1000,2), obj.avg_frame_rate, interlaced, obj.sync, obj.ref_file, obj.ref_deint ,obj.scale_filter, vmaf_model , obj.vmaf_avg, obj.psnr_avg)
 			self.input_txt.append(input_str)
 		#self.input_txt.setText(input_str)
 
