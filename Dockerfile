@@ -21,7 +21,8 @@ RUN \
 	&& git clone https://github.com/Netflix/vmaf.git . \
 	&& make \
 	&& make install \
-        && rm -r /tmp/vmaf
+	&& mv model /usr/local/share \
+    && rm -r /tmp/vmaf
 
 
 RUN \

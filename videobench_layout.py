@@ -90,9 +90,9 @@ class Ui_fenetrePrincipale(object):
         self.vmaf_model_setting.setAlignment(QtCore.Qt.AlignRight)
         self.vmaf_model_combobox = QtWidgets.QComboBox()
         self.vmaf_model_combobox.insertItem(0, "auto")
-        self.vmaf_model_combobox.insertItem(1, "vmaf_float_v0.6.1.pkl")
-        self.vmaf_model_combobox.insertItem(2, "vmaf_float_v0.6.1.pkl:phone_model")
-        self.vmaf_model_combobox.insertItem(3, "vmaf_4k_v0.6.1.pkl")
+        self.vmaf_model_combobox.insertItem(1, "vmaf_v0.6.1.json")
+        self.vmaf_model_combobox.insertItem(2, "vmaf_v0.6.1.json:phone_model")
+        self.vmaf_model_combobox.insertItem(3, "vmaf_4k_v0.6.1.json")
 
 
         self.loglevel_setting = QtWidgets.QLabel()
