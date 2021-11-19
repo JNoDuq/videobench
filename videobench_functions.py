@@ -9,6 +9,7 @@ from PySide2.QtCore import QPoint, Qt
 from PySide2.QtGui import QPainter
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCharts import QtCharts
+import multiprocessing
 
 
 container_tmp_path ="/home/shared-vmaf/"
@@ -349,7 +350,7 @@ def make_packets_info(input_obj, loglevel):
 def call_quality_info(args):
     make_quality_info(*args)
 
-def make_quality_info(ref_obj, input_obj, loglevel):
+def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 
 
 	sync_time = float(input_obj.sync) ############################################# sync time 
@@ -366,27 +367,26 @@ def make_quality_info(ref_obj, input_obj, loglevel):
 	print(" VMAF Model : {0}".format(input_obj.vmaf_model),flush=True)
 	print(" Scale filter : {0}".format(input_obj.scale_filter),flush=True)
 	print(" Quality Subsampling : {1}".format(input_obj.filename, input_obj.n_subsample),flush=True)
-	print(" Calculate VMAF & PSNR (libvmaf)",flush=True)
+	cpu_number = multiprocessing.cpu_count()
+	print(" Calculate VMAF & PSNR (libvmaf) on {} treads".format(cpu_number),flush=True)
 	print("",flush=True)
 
-	cmd = (''' {0} ffmpeg -y -loglevel {14} -stats -i {1}{2} -i {1}{3} ''' \
-		'''-lavfi "[0]{10}[refdeint];[refdeint]{12}[ref];[1]setpts=PTS{4}/TB[b];[b]{13}[c];[c][ref]libvmaf='log_fmt=json:psnr=1:model_path={7}:n_subsample={8}:log_path={1}quality_{9}.json'" ''' \
+	cmd = (''' {DOCKER_CMD} ffmpeg -y -loglevel {LOGLEVEL} -stats -i {CONTAINER_TMP_PATH}{REF_FILENAME} -i {CONTAINER_TMP_PATH}{INPUT_FILENAME} ''' \
+		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:psnr=1:model_path={VMAF_MODEL}:n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
 		'''-f null - ''').format(
-		docker_cmd,
-		container_tmp_path,
-		ref_obj.filename,
-		input_obj.filename,
-		sync_time_str,
-		ref_obj.resolution[0],
-		ref_obj.resolution[1],
-		input_obj.vmaf_model,
-		input_obj.n_subsample,
-		input_obj.name,
-		input_obj.ref_deint,
-		input_obj.scale_filter,
-		ref_obj.scale_filter,
-		input_obj.scale_filter,
-		loglevel)
+		DOCKER_CMD = docker_cmd,
+		CONTAINER_TMP_PATH = container_tmp_path,
+		REF_FILENAME = ref_obj.filename,
+		INPUT_FILENAME = input_obj.filename,
+		SYNC_TIME = sync_time_str,
+		VMAF_MODEL = input_obj.vmaf_model,
+		N_SUBSAMPLE = input_obj.n_subsample,
+		INPUT_NAME = input_obj.name,
+		REF_DEINT = input_obj.ref_deint,
+		SCALE_FILTER = input_obj.scale_filter,
+		REF_SCALE_FILTER = ref_obj.scale_filter,
+		LOGLEVEL = loglevel,
+		N_THREADS = str(cpu_number))
 
 	print(cmd)
 

@@ -150,6 +150,7 @@ if __name__ == '__main__':
 	parser.add_argument('-scale', dest='scale', default = "neighbor", help="Scale filter flags (default=neighbor)" )
 	parser.add_argument('-vmaf_model', dest='vmaf_model', default = "auto", help="VMAF Model (default=auto)" )
 	parser.add_argument('-loglevel', dest='loglevel', default = "info", help="ffprobe/ffmpeg loglevel" )
+	parser.add_argument('-n_threads', dest='n_threads', default = 1, help="vmaf process number of  threads" )
 
 
 	args = parser.parse_args()
@@ -162,6 +163,7 @@ if __name__ == '__main__':
 	scale_filter = args.scale
 	vmaf_model = args.vmaf_model
 	loglevel = args.loglevel
+	n_threads = args.n_threads
 
 
 	os.makedirs(tmp_path, exist_ok=True)
@@ -213,7 +215,7 @@ if __name__ == '__main__':
 			set_vmaf_model(ref_obj, input_obj)
 			set_scaling_filter(ref_obj, input_obj)
 			#arguments.append([ref_obj, input_obj])
-			make_quality_info(ref_obj, input_obj, loglevel)
+			make_quality_info(ref_obj, input_obj, loglevel, n_threads)
 		
 		#p.map(call_quality_info, arguments)
 		
@@ -253,7 +255,6 @@ if __name__ == '__main__':
 	print("* Results...",flush=True)
 	for input_obj in list_input_obj:
 		output_json = json.dumps(input_obj.__dict__, sort_keys=True, indent=4)
-		print(output_json)
 		print("",flush=True)
 		print("-> {0}".format(input_obj.filename),flush=True)
 		print(" Bitrate AVG : {0} Mbps".format(input_obj.bitrate_avg),flush=True)

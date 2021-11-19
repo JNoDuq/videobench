@@ -220,19 +220,16 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 		for obj in self.list_obj:
 			try:
-				print("framevmafls")
 				self.vmafls_frame_dict[obj.filename] = obj.get_lineSeries_vmaf()
 			except:
 				pass
 
 			try:
-				print("framepsnrls")	
 				self.psnrls_frame_dict[obj.filename] = obj.get_lineSeries_psnr()
 			except:
 				pass
 
 			try:
-				print("framebitratels")	
 				self.bitratels_frame_dict[obj.filename] = obj.get_lineSeries_bitrate_frame()
 			except:
 				pass
