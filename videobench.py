@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
 	os.makedirs(tmp_path, exist_ok=True)
 
-	if ref_file: ##################################################################### ref_file to ref_obj
+	if ref_file: ############################################################################ ref_file to ref_obj
 
 		print("* Analyzing Reference File...",flush=True)
 		ref_obj = manage_ref_file(ref_file, loglevel)
@@ -217,7 +217,7 @@ if __name__ == '__main__':
 		
 		#p.map(call_quality_info, arguments)
 		
-		for input_obj in list_input_obj: ################################### read quality json 
+		for input_obj in list_input_obj: #################################################### read quality json 
 
 			try:
 				data_json = json.load(open("{0}quality_{1}.json".format( tmp_path , input_obj.name)))
@@ -253,6 +253,7 @@ if __name__ == '__main__':
 	print("* Results...",flush=True)
 	for input_obj in list_input_obj:
 		output_json = json.dumps(input_obj.__dict__, sort_keys=True, indent=4)
+		print(output_json)
 		print("",flush=True)
 		print("-> {0}".format(input_obj.filename),flush=True)
 		print(" Bitrate AVG : {0} Mbps".format(input_obj.bitrate_avg),flush=True)

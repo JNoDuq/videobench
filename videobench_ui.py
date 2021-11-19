@@ -202,7 +202,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 				self.vmafls_dict[obj.filename] = obj.get_lineSeries_vmaf_s()
 			except:
 				pass
-
+			
 			try:
 				self.psnrls_dict[obj.filename] = obj.get_lineSeries_psnr_s()
 			except:
@@ -220,16 +220,19 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 		for obj in self.list_obj:
 			try:
+				print("framevmafls")
 				self.vmafls_frame_dict[obj.filename] = obj.get_lineSeries_vmaf()
 			except:
 				pass
 
-			try:	
+			try:
+				print("framepsnrls")	
 				self.psnrls_frame_dict[obj.filename] = obj.get_lineSeries_psnr()
 			except:
 				pass
 
-			try:	
+			try:
+				print("framebitratels")	
 				self.bitratels_frame_dict[obj.filename] = obj.get_lineSeries_bitrate_frame()
 			except:
 				pass
@@ -263,11 +266,12 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			if obj.name == name:
 
 				try:
+
 					self.chart_vmaf.addSeries(self.vmafls_dict[obj.filename])
 					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignBottom)
 					self.chart_vmaf.addAxis(QtCharts.QValueAxis(), QtCore.Qt.AlignLeft)
 					self.chart_vmaf.createDefaultAxes()
-				except:	
+				except:
 					pass
 
 				try:
@@ -748,6 +752,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		self.radio_time.setChecked(True)
 		
 		for i in (range(self.inputs_checkbox_vlayout.count())):
+
 			if type(self.inputs_checkbox_vlayout.itemAt(i).widget()) == QtWidgets.QCheckBox :
 				self.inputs_checkbox_vlayout.itemAt(i).widget().setCheckState(QtCore.Qt.CheckState.Checked)
 				self.add_lineSeries(self.inputs_checkbox_vlayout.itemAt(i).widget())
