@@ -41,7 +41,8 @@ class videoFileInfos(object):
 		ref_deint = "null",
 		scale_filter = "neighbor",
 		n_subsample = 1,
-		frame_size = None):
+		frame_size = None,
+		duration = None):
 
 		self.filename = filename
 		self.name = name
@@ -368,12 +369,12 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 	print(" Scale filter : {0}".format(input_obj.scale_filter),flush=True)
 	print(" Quality Subsampling : {1}".format(input_obj.filename, input_obj.n_subsample),flush=True)
 	cpu_number = multiprocessing.cpu_count()
-	print(" Calculate VMAF & PSNR (libvmaf) on {} treads".format(cpu_number),flush=True)
+	print(" Calculate VMAF & PSNR (libvmaf - {} treads)".format(cpu_number),flush=True)
 	print("",flush=True)
 
 	cmd = (''' {DOCKER_CMD} ffmpeg -y -loglevel {LOGLEVEL} -stats -i {CONTAINER_TMP_PATH}{REF_FILENAME} -i {CONTAINER_TMP_PATH}{INPUT_FILENAME} ''' \
 		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:psnr=1:model_path={VMAF_MODEL}:n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
-		'''-f null - ''').format(
+		''' -t {DURATION} -f null - ''').format(
 		DOCKER_CMD = docker_cmd,
 		CONTAINER_TMP_PATH = container_tmp_path,
 		REF_FILENAME = ref_obj.filename,
@@ -386,7 +387,8 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 		SCALE_FILTER = input_obj.scale_filter,
 		REF_SCALE_FILTER = ref_obj.scale_filter,
 		LOGLEVEL = loglevel,
-		N_THREADS = str(cpu_number))
+		N_THREADS = str(cpu_number),
+		DURATION = input_obj.duration - sync_time)
 
 	print(cmd)
 
