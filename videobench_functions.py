@@ -373,7 +373,7 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 	print("",flush=True)
 
 	cmd = (''' {DOCKER_CMD} ffmpeg -y -loglevel {LOGLEVEL} -stats -i {CONTAINER_TMP_PATH}{REF_FILENAME} -i {CONTAINER_TMP_PATH}{INPUT_FILENAME} ''' \
-		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:psnr=1:model_path={VMAF_MODEL}:n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
+		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:feature='name=psnr':model='path={VMAF_MODEL}':n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
 		''' -t {DURATION} -f null - ''').format(
 		DOCKER_CMD = docker_cmd,
 		CONTAINER_TMP_PATH = container_tmp_path,
