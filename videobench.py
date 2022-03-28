@@ -245,7 +245,7 @@ if __name__ == '__main__':
 					pass
 
 				try:
-					psnr_values.append(data_json['frames'][i]["metrics"]["psnr"]) ################################# get psnr values (libvmaf)
+					psnr_values.append(data_json['frames'][i]["metrics"]["psnr_y"]) ################################# get psnr values (libvmaf)
 				except Exception:
 					pass
 
