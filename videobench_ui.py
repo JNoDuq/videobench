@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import os
+os.environ['QT_MAC_WANTS_LAYER'] = '1'
 import sys
 from subprocess import call
 from subprocess import Popen, PIPE
