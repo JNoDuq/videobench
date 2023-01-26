@@ -265,8 +265,8 @@ def set_scaling_filter(ref_obj, input_obj):
 			input_obj.scale_filter = 'scale=3840:2160:flags={}'.format(input_obj.scale_filter)
 
 def get_video_streams_info(input_file, loglevel):  
-	cmd = "{0} ffprobe -loglevel {3} -print_format json -show_streams -select_streams v -i {1}{2}".format(docker_cmd , container_tmp_path, input_file, loglevel)
-
+	cmd = "{0} ffprobe -loglevel {3} -print_format json -show_streams -show_entries format=duration -select_streams v -i {1}{2}".format(docker_cmd , container_tmp_path, input_file, loglevel)
+	print(cmd,flush=True)
 	if loglevel == "info":
 		print(cmd, flush=True)
 

@@ -80,8 +80,10 @@ def manage_input_files(all_input, loglevel):
 			input_obj.path = input_path
 			input_obj.name, ext = os.path.splitext(filename)
 
-			input_obj.duration = float(ffprobe_json['streams'][0]['duration'])
-
+			try:
+				input_obj.duration = float(ffprobe_json['streams'][0]['duration'])
+			except KeyError:
+				input_obj.duration = float(ffprobe_json['format']['duration'])
 			fps_str = ffprobe_json['streams'][0]['r_frame_rate']
 			num,den = fps_str.split( '/' )
 			input_obj.r_frame_rate = round((float(num)/float(den)),0)
