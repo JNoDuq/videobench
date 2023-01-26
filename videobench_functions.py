@@ -3,6 +3,7 @@ from subprocess import call
 import subprocess
 import json
 import operator
+import sys
 
 from PySide2 import QtGui, QtWidgets, QtCore     ############# If you are not using the GUI , you can remove this block of import
 from PySide2.QtCore import QPoint, Qt
@@ -26,6 +27,8 @@ class videoFileInfos(object):
 		resolution = None,
 		vmaf = None,
 		vmaf_avg = None,
+		vmaf_max = None,
+		vmaf_min = None,
 		vmaf_model = "auto",
 		psnr = None,
 		psnr_avg = None,
@@ -181,7 +184,6 @@ def set_reference_deint_old(ref_obj, input_obj):
 	elif ref_obj.interlaced == 0 :
 		input_obj.ref_deint = "null"
 
-
 def set_reference_deint(ref_obj, input_obj):
 
 
@@ -234,7 +236,6 @@ def set_vmaf_model(ref_obj, input_obj):
 
 	elif input_obj.vmaf_model == "vmaf_float_v0.6.1.json:phone_model":
 		input_obj.vmaf_model = '/usr/local/share/model/vmaf_float_v0.6.1.json:phone_model=1'
-
 
 def set_scaling_filter(ref_obj, input_obj):
 
@@ -316,15 +317,20 @@ def find_sync_values (ref_obj, input_obj, sync, sw):
 
 def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 
-	cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 3 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[c][ref]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename,  sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
-
-	psnr_raw = (subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)).decode('utf-8')
-	psnr_list =  psnr_raw.split(" ")
-	average = [s for s in psnr_list if "average" in s]
-	average_name,average_value = average[0].split(":")
-	if average_value =="inf":
-		average_value = 1000
-	return float(average_value)
+	try: 
+		cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 1 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[c][ref]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename,  sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
+		#print(cmd, flush=True)
+		psnr_raw = (subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)).decode('utf-8')
+		psnr_list =  psnr_raw.split(" ")
+		average = [s for s in psnr_list if "average" in s]
+		average_name,average_value = average[0].split(":")
+		if average_value =="inf":
+			average_value = 1000
+		return float(average_value)
+	except Exception as e:
+		#print("Error with psnr cmd -> {} : error : {}".format(cmd, e), flush=True)
+		return float(0)
+		#sys.exit(1)
 
 def call_frames_info(args):
 	make_frames_info(*args)
@@ -373,7 +379,7 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 	print("",flush=True)
 
 	cmd = (''' {DOCKER_CMD} ffmpeg -y -loglevel {LOGLEVEL} -stats -i {CONTAINER_TMP_PATH}{REF_FILENAME} -i {CONTAINER_TMP_PATH}{INPUT_FILENAME} ''' \
-		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:feature='name=psnr':model='path={VMAF_MODEL}':n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
+		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{INPUT_SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:feature='name=psnr':model='path={VMAF_MODEL}':n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
 		''' -t {DURATION} -f null - ''').format(
 		DOCKER_CMD = docker_cmd,
 		CONTAINER_TMP_PATH = container_tmp_path,
@@ -384,7 +390,7 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 		N_SUBSAMPLE = input_obj.n_subsample,
 		INPUT_NAME = input_obj.name,
 		REF_DEINT = input_obj.ref_deint,
-		SCALE_FILTER = input_obj.scale_filter,
+		INPUT_SCALE_FILTER = input_obj.scale_filter,
 		REF_SCALE_FILTER = ref_obj.scale_filter,
 		LOGLEVEL = loglevel,
 		N_THREADS = str(cpu_number),
