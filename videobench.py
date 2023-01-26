@@ -251,6 +251,8 @@ if __name__ == '__main__':
 
 			input_obj.vmaf = vmaf_values
 			input_obj.vmaf_avg = round(sum(vmaf_values)/len(vmaf_values), 2)
+			input_obj.vmaf_max = max(vmaf_values)
+			input_obj.vmaf_min = min(vmaf_values)
 			input_obj.psnr = psnr_values
 			input_obj.psnr_avg = round(sum(psnr_values)/len(psnr_values), 2)
 
@@ -262,6 +264,8 @@ if __name__ == '__main__':
 		print(" Bitrate AVG : {0} Mbps".format(input_obj.bitrate_avg),flush=True)
 		print(" PSNR AVG : {0}".format(input_obj.psnr_avg),flush=True)
 		print(" VMAF AVG : {0}".format(input_obj.vmaf_avg),flush=True)
+		print(" VMAF MAX : {0}".format(input_obj.vmaf_max),flush=True)
+		print(" VMAF MIN : {0}".format(input_obj.vmaf_min),flush=True)
 
 		######## tests files json output #####
 		f = open("{0}/{1}.json".format(input_obj.path, input_obj.name),'w')

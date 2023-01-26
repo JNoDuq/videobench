@@ -27,6 +27,8 @@ class videoFileInfos(object):
 		resolution = None,
 		vmaf = None,
 		vmaf_avg = None,
+		vmaf_max = None,
+		vmaf_min = None,
 		vmaf_model = "auto",
 		psnr = None,
 		psnr_avg = None,
@@ -182,7 +184,6 @@ def set_reference_deint_old(ref_obj, input_obj):
 	elif ref_obj.interlaced == 0 :
 		input_obj.ref_deint = "null"
 
-
 def set_reference_deint(ref_obj, input_obj):
 
 
@@ -235,7 +236,6 @@ def set_vmaf_model(ref_obj, input_obj):
 
 	elif input_obj.vmaf_model == "vmaf_float_v0.6.1.json:phone_model":
 		input_obj.vmaf_model = '/usr/local/share/model/vmaf_float_v0.6.1.json:phone_model=1'
-
 
 def set_scaling_filter(ref_obj, input_obj):
 
@@ -318,7 +318,7 @@ def find_sync_values (ref_obj, input_obj, sync, sw):
 def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 
 	try: 
-		cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 3 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[c][ref]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename,  sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
+		cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 1 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[c][ref]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename,  sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
 		#print(cmd, flush=True)
 		psnr_raw = (subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)).decode('utf-8')
 		psnr_list =  psnr_raw.split(" ")
@@ -329,7 +329,8 @@ def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 		return float(average_value)
 	except Exception as e:
 		print("Error with psnr cmd -> {} : error : {}".format(cmd, e), flush=True)
-		sys.exit(1)
+		return float(0)
+		#sys.exit(1)
 
 def call_frames_info(args):
 	make_frames_info(*args)
