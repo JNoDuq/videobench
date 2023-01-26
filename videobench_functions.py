@@ -328,7 +328,7 @@ def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 			average_value = 1000
 		return float(average_value)
 	except Exception as e:
-		print("Error with psnr cmd -> {} : error : {}".format(cmd, e), flush=True)
+		#print("Error with psnr cmd -> {} : error : {}".format(cmd, e), flush=True)
 		return float(0)
 		#sys.exit(1)
 
