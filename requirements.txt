@@ -1,0 +1,10 @@
+defusedxml==0.7.1
+httpie==3.2.1
+markdown-it-py==2.2.0
+mdurl==0.1.2
+multidict==6.0.4
+Pygments==2.15.1
+PySide2==5.15.2.1
+requests-toolbelt==0.10.1
+rich==13.3.4
+shiboken2==5.15.2.1

@@ -10,7 +10,7 @@ import json
 from multiprocessing import Pool
 from videobench_functions import *
 
-tmp_path = "/tmp/videobench/"
+tmp_path = tmp_path = os.path.join(os.getcwd(), "tmp/")
 #p = Pool(1)
 
 def manage_ref_file(ref_file, loglevel):

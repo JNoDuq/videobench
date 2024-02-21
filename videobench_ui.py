@@ -39,7 +39,6 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 	def Init_values(self):
 		self.currentPath = os.path.dirname(__file__)
-		self.python_path = "python3"
 		self.videoAnalyzerPath = os.path.dirname(os.path.abspath(__file__)) + "/videobench.py"
 		self.list_obj=[]
 		self.jsonFilesNames = []
@@ -593,6 +592,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		scale_setting = self.scale_combobox.currentText()
 		vmaf_model_setting =  self.vmaf_model_combobox.currentText()
 		loglevel = self.loglevel_combobox.currentText()
+		python_path = self.python_path_combobox.currentText()
 
 		self.progressbar_step = 1
 		self.progressbar.setValue(self.progressbar_step)
@@ -626,7 +626,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		
 		self.te_operation.append("*****************************")
 		self.te_operation.append("STARTING VIDEO BENCH")
-		self.te_operation.append(self.python_path + " " + cmd)
+		self.te_operation.append(python_path + " " + cmd)
 		self.te_operation.append("*****************************")
 
 
@@ -635,7 +635,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 		process.readyReadStandardOutput.connect(partial(self.dataReady, process))
 		process.finished.connect(self.update_ui)
 		process.setProgram(self.videoAnalyzerPath)
-		process.start(self.python_path, cmd_list)
+		process.start(python_path, cmd_list)
 
 
 
