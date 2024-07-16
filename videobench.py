@@ -15,7 +15,7 @@ tmp_path = "/tmp/videobench/"
 
 def manage_ref_file(ref_file, loglevel):
 		
-		ref_path, filename = os.path.split(ref_file)
+		ref_path, filename = os.path.split(os.path.abspath(ref_file))
 		copyfile(ref_file, tmp_path + filename) ################ copy ref file  to local tmp path
 
 		ffprobe_json = get_video_streams_info(filename, loglevel) ############ get video file info 
@@ -71,7 +71,7 @@ def manage_input_files(all_input, loglevel):
 	for input_list in all_input:
 		for input_file in input_list:
 
-			input_path, filename = os.path.split(input_file) 
+			input_path, filename = os.path.split(os.path.abspath(input_file))
 			copyfile(input_file, tmp_path + filename) ################################## copy input file  to local tmp path
 
 			ffprobe_json = get_video_streams_info(filename, loglevel) ############################ get video file info 
