@@ -1,28 +1,40 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 from sys import argv
 import sys
 import argparse
 import os
-from shutil import copyfile
+#from shutil import copyfile
 from shutil import rmtree
 import json
 from multiprocessing import Pool
 from videobench_functions import *
-
-tmp_path = "/tmp/videobench/"
+import tempfile
 #p = Pool(1)
 
-def manage_ref_file(ref_file, loglevel):
-		
-		ref_path, filename = os.path.split(os.path.abspath(ref_file))
-		copyfile(ref_file, tmp_path + filename) ################ copy ref file  to local tmp path
+def common_create_file(file, tmp_path, loglevel):
+	abspath = os.path.abspath(file)
+	path, filename = os.path.split(abspath)
 
-		ffprobe_json = get_video_streams_info(filename, loglevel) ############ get video file info 
-		ref_obj = videoFileInfos()
-		ref_obj.path = ref_path
-		ref_obj.filename = filename
-		ref_obj.name , ext = os.path.splitext(filename)
+	fileobj = videoFileInfos()
+	fileobj.path = path
+	fileobj.filename = filename
+	fileobj.abspath = abspath
+	fileobj.name, ext = os.path.splitext(filename)
+
+		### create a temp file and use the name for docker to map real file
+	tmpfile = tempfile.NamedTemporaryFile(prefix=tmp_path, delete=False)
+	path, fileobj.map_filename = os.path.split(tmpfile.name)
+
+	return fileobj
+
+def manage_ref_file(ref_file, tmp_path, loglevel):
+		abspath = os.path.abspath(ref_file)
+		ref_path, filename = os.path.split(abspath)
+
+		ref_obj = common_create_file(ref_file, tmp_path, loglevel)
+
+		ffprobe_json = get_video_streams_info(ref_obj, loglevel) ############ get video file info
 
 		fps_str = ffprobe_json['streams'][0]['r_frame_rate']
 		num,den = fps_str.split( '/' )
@@ -36,7 +48,7 @@ def manage_ref_file(ref_file, loglevel):
 		
 		ref_obj.resolution = [ffprobe_json['streams'][0]['width'], ffprobe_json['streams'][0]['height']]
 
-		make_packets_info(ref_obj, loglevel) ############################################################################### Bitrate from packets
+		make_packets_info(ref_obj, tmp_path, loglevel) ############################################################################### Bitrate from packets
 		data_json = json.load(open("{0}packets_{1}.json".format(tmp_path, ref_obj.name)))
 		pkt_size_list = []
 		for i in range(len(data_json['packets'])):
@@ -46,7 +58,7 @@ def manage_ref_file(ref_file, loglevel):
 				pass
 		ref_obj.pkt_size = pkt_size_list
 				
-		make_frames_info(ref_obj, loglevel)
+		make_frames_info(ref_obj, tmp_path, loglevel)
 		data_json = json.load(open("{0}frames_{1}.json".format(tmp_path, ref_obj.name)))
 		interlaced_frame_list = []
 		ref_obj.frame_size = []
@@ -66,19 +78,17 @@ def manage_ref_file(ref_file, loglevel):
 		
 		return ref_obj
 
-def manage_input_files(all_input, loglevel):
+def manage_input_files(all_input, tmp_path, loglevel):
 
 	for input_list in all_input:
 		for input_file in input_list:
 
-			input_path, filename = os.path.split(os.path.abspath(input_file))
-			copyfile(input_file, tmp_path + filename) ################################## copy input file  to local tmp path
+			abspath = os.path.abspath(input_file)
+			input_path, filename = os.path.split(abspath)
 
-			ffprobe_json = get_video_streams_info(filename, loglevel) ############################ get video file info 
-			input_obj = videoFileInfos()
-			input_obj.filename = filename
-			input_obj.path = input_path
-			input_obj.name, ext = os.path.splitext(filename)
+			input_obj = common_create_file(input_file, tmp_path, loglevel)
+
+			ffprobe_json = get_video_streams_info(input_obj, loglevel) ############################ get video file info
 
 			input_obj.duration = float(ffprobe_json['streams'][0]['duration'])
 
@@ -99,8 +109,8 @@ def manage_input_files(all_input, loglevel):
 	arguments = []
 	for input_obj in list_input_obj:
 		#arguments.append([input_obj])
-		make_packets_info(input_obj, loglevel)
-		make_frames_info(input_obj, loglevel)
+		make_packets_info(input_obj, tmp_path, loglevel)
+		make_frames_info(input_obj, tmp_path, loglevel)
 
 	#p.map(call_packets_info, arguments)
 	#p.map(call_frames_info, arguments)
@@ -167,20 +177,23 @@ if __name__ == '__main__':
 	loglevel = args.loglevel
 	n_threads = args.n_threads
 
+	__temp_dir = tempfile.TemporaryDirectory(prefix="videobench-")
+	tmp_path = __temp_dir.name + '/'
+	print("temp directory name", tmp_path)
 
-	os.makedirs(tmp_path, exist_ok=True)
+#	os.makedirs(tmp_path, exist_ok=True)
 
 	if ref_file: ############################################################################ ref_file to ref_obj
 
 		print("* Analyzing Reference File...",flush=True)
-		ref_obj = manage_ref_file(ref_file, loglevel)
+		ref_obj = manage_ref_file(ref_file, tmp_path, loglevel)
 
 	list_input_obj = [] ##################################################################### list_input_file to list_input_obj
 
 	if all_input and all_input != [['']]:
 
 		print("* Analyzing tests Files...",flush=True)
-		list_input_obj = manage_input_files(all_input, loglevel)
+		list_input_obj = manage_input_files(all_input, tmp_path, loglevel)
 
 		if sync_windows :
 			print("* Search sync values...",flush=True)
@@ -217,7 +230,7 @@ if __name__ == '__main__':
 			set_vmaf_model(ref_obj, input_obj)
 			set_scaling_filter(ref_obj, input_obj)
 			#arguments.append([ref_obj, input_obj])
-			make_quality_info(ref_obj, input_obj, loglevel, n_threads)
+			make_quality_info(ref_obj, input_obj, tmp_path, loglevel, n_threads)
 		
 		#p.map(call_quality_info, arguments)
 		
@@ -279,7 +292,4 @@ if __name__ == '__main__':
 		f = open("{0}/{1}.json".format(ref_obj.path, ref_obj.name),'w')
 		f.write(output_json)
 		f.close()
-
-
-
 
