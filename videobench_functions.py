@@ -18,8 +18,6 @@ import multiprocessing
 
 
 container_tmp_path ="/home/shared-vmaf/"
-tmp_path = "/tmp/videobench/"
-docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(tmp_path, container_tmp_path)
 
 class videoFileInfos(object):
 	def __init__(self,
@@ -74,6 +72,8 @@ class videoFileInfos(object):
 		self.interlaced = interlaced
 		self.sync = sync
 		self.groupe = groupe
+		self.abspath = None
+		self.map_filename = None
 
 
 	def get_mbps(self): 
@@ -268,8 +268,9 @@ def set_scaling_filter(ref_obj, input_obj):
 		else:
 			input_obj.scale_filter = 'scale=3840:2160:flags={}'.format(input_obj.scale_filter)
 
-def get_video_streams_info(input_file, loglevel):  
-	cmd = "{0} ffprobe -loglevel {3} -print_format json -show_streams -select_streams v -i {1}{2}".format(docker_cmd , container_tmp_path, input_file, loglevel)
+def get_video_streams_info(input_obj, loglevel):
+	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(input_obj.abspath, container_tmp_path + input_obj.map_filename)
+	cmd = "{0} ffprobe -loglevel {3} -print_format json -show_streams -select_streams v -i {1}{2}".format(docker_cmd , container_tmp_path, input_obj.map_filename, loglevel)
 
 	if loglevel == "info":
 		print(cmd, flush=True)
@@ -320,6 +321,7 @@ def find_sync_values (ref_obj, input_obj, sync, sw):
 	return sync_value[index]
 
 def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
+	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(os.environ['VIDEO_BENCH_TMPDIR'], container_tmp_path)
 
 	try: 
 		cmd = ("{0} ffmpeg -y -i {1}{2} -i {1}{3} -ss {4} -t 1 -lavfi '[0]{5}[ref];[1]setpts=PTS{4}/TB[b];[b]scale={6}:{7}[c];[c][ref]psnr=stats_file=psnr_Test.log' -f null -".format(docker_cmd, container_tmp_path, ref_obj.filename, input_obj.filename,  sync_str, input_obj.ref_deint, ref_resolution[0], ref_resolution[1]))
@@ -339,8 +341,9 @@ def get_sync_psnr (ref_obj, input_obj, sync_str, ref_resolution):
 def call_frames_info(args):
 	make_frames_info(*args)
 
-def make_frames_info(input_obj, loglevel): 
-	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_frames -print_format json -select_streams v > {3}frames_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.filename, tmp_path, input_obj.name, loglevel))
+def make_frames_info(input_obj, tmp_path, loglevel):
+	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(input_obj.abspath, container_tmp_path + input_obj.map_filename)
+	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_frames -print_format json -select_streams v > {3}frames_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.map_filename, tmp_path, input_obj.name, loglevel))
 
 	if loglevel == "info":
 		print(cmd, flush=True)
@@ -350,8 +353,9 @@ def make_frames_info(input_obj, loglevel):
 def call_packets_info(args):
 	make_packets_info(*args)
 
-def make_packets_info(input_obj, loglevel): 
-	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_packets -print_format json -select_streams v > {3}packets_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.filename, tmp_path, input_obj.name, loglevel))
+def make_packets_info(input_obj, tmp_path, loglevel):
+	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(input_obj.abspath, container_tmp_path + input_obj.map_filename)
+	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_packets -print_format json -select_streams v > {3}packets_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.map_filename, tmp_path, input_obj.name, loglevel))
 
 	if loglevel == "info":
 		print(cmd, flush=True)
@@ -361,8 +365,9 @@ def make_packets_info(input_obj, loglevel):
 def call_quality_info(args):
     make_quality_info(*args)
 
-def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
-
+def make_quality_info(ref_obj, input_obj, tmp_path, loglevel, n_threads):
+	docker_cmd = "docker container run --rm  -v {}:{} -v {}:{} -v {}:{} docker-videobench".format(tmp_path, container_tmp_path, \
+			ref_obj.abspath, container_tmp_path + ref_obj.map_filename, input_obj.abspath, container_tmp_path + input_obj.map_filename)
 
 	sync_time = float(input_obj.sync) ############################################# sync time 
 	sync_time = round(sync_time, 2)
@@ -387,8 +392,8 @@ def make_quality_info(ref_obj, input_obj, loglevel, n_threads):
 		''' -t {DURATION} -f null - ''').format(
 		DOCKER_CMD = docker_cmd,
 		CONTAINER_TMP_PATH = container_tmp_path,
-		REF_FILENAME = ref_obj.filename,
-		INPUT_FILENAME = input_obj.filename,
+		REF_FILENAME = ref_obj.map_filename,
+		INPUT_FILENAME = input_obj.map_filename,
 		SYNC_TIME = sync_time_str,
 		VMAF_MODEL = input_obj.vmaf_model,
 		N_SUBSAMPLE = input_obj.n_subsample,
