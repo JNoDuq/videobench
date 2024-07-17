@@ -39,7 +39,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 
 	def Init_values(self):
 		self.currentPath = os.path.dirname(__file__)
-		self.python_path = "python3"
+		self.python_path = sys.executable
 		self.videoAnalyzerPath = os.path.dirname(os.path.abspath(__file__)) + "/videobench.py"
 		self.list_obj=[]
 		self.jsonFilesNames = []
