@@ -5,11 +5,15 @@ import json
 import operator
 import sys
 
-from PySide2 import QtGui, QtWidgets, QtCore     ############# If you are not using the GUI , you can remove this block of import
-from PySide2.QtCore import QPoint, Qt
-from PySide2.QtGui import QPainter
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCharts import QtCharts
+try:
+	from PySide2 import QtGui, QtWidgets, QtCore     ############# If you are not using the GUI , you can remove this block of import
+	from PySide2.QtCore import QPoint, Qt
+	from PySide2.QtGui import QPainter
+	from PySide2.QtWidgets import QMainWindow, QApplication
+	from PySide2.QtCharts import QtCharts
+except ImportError:
+	print("Import PySide2 Error\n");
+
 import multiprocessing
 
 
