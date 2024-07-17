@@ -171,6 +171,9 @@ class videoFileInfos(object):
 		lineSeries_bitrate.setName(self.filename)
 		return lineSeries_bitrate
 
+	def json(self, pattern):
+		return pattern + '_' + self.name + '_' + self.map_filename + '.json'
+
 def set_reference_deint_old(ref_obj, input_obj):
 
 
@@ -343,7 +346,8 @@ def call_frames_info(args):
 
 def make_frames_info(input_obj, tmp_path, loglevel):
 	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(input_obj.abspath, container_tmp_path + input_obj.map_filename)
-	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_frames -print_format json -select_streams v > {3}frames_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.map_filename, tmp_path, input_obj.name, loglevel))
+	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {4} -show_frames -print_format json -select_streams v > {3}'''.format(docker_cmd, container_tmp_path, \
+			input_obj.map_filename, tmp_path + input_obj.json("frames"), loglevel))
 
 	if loglevel == "info":
 		print(cmd, flush=True)
@@ -355,7 +359,8 @@ def call_packets_info(args):
 
 def make_packets_info(input_obj, tmp_path, loglevel):
 	docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(input_obj.abspath, container_tmp_path + input_obj.map_filename)
-	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {5} -show_packets -print_format json -select_streams v > {3}packets_{4}.json'''.format(docker_cmd, container_tmp_path, input_obj.map_filename, tmp_path, input_obj.name, loglevel))
+	cmd = ('''{0} ffprobe -i {1}{2} -loglevel {4} -show_packets -print_format json -select_streams v > {3}'''.format(docker_cmd, container_tmp_path, \
+			input_obj.map_filename, tmp_path + input_obj.json("packets"), loglevel))
 
 	if loglevel == "info":
 		print(cmd, flush=True)
@@ -388,7 +393,7 @@ def make_quality_info(ref_obj, input_obj, tmp_path, loglevel, n_threads):
 	print("",flush=True)
 
 	cmd = (''' {DOCKER_CMD} ffmpeg -y -loglevel {LOGLEVEL} -stats -i {CONTAINER_TMP_PATH}{REF_FILENAME} -i {CONTAINER_TMP_PATH}{INPUT_FILENAME} ''' \
-		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{INPUT_SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:feature='name=psnr':model='path={VMAF_MODEL}':n_subsample={N_SUBSAMPLE}:log_path={CONTAINER_TMP_PATH}quality_{INPUT_NAME}.json'" ''' \
+		'''-lavfi "[0]{REF_DEINT}[refdeint];[refdeint]{REF_SCALE_FILTER}[ref];[1]setpts=PTS{SYNC_TIME}/TB[b];[b]{INPUT_SCALE_FILTER}[c];[c][ref]libvmaf='n_threads={N_THREADS}:log_fmt=json:feature='name=psnr':model='path={VMAF_MODEL}':n_subsample={N_SUBSAMPLE}:log_path={JSON_FILE}'" ''' \
 		''' -t {DURATION} -f null - ''').format(
 		DOCKER_CMD = docker_cmd,
 		CONTAINER_TMP_PATH = container_tmp_path,
@@ -397,7 +402,7 @@ def make_quality_info(ref_obj, input_obj, tmp_path, loglevel, n_threads):
 		SYNC_TIME = sync_time_str,
 		VMAF_MODEL = input_obj.vmaf_model,
 		N_SUBSAMPLE = input_obj.n_subsample,
-		INPUT_NAME = input_obj.name,
+		JSON_FILE = container_tmp_path + input_obj.json("quality"),
 		REF_DEINT = input_obj.ref_deint,
 		INPUT_SCALE_FILTER = input_obj.scale_filter,
 		REF_SCALE_FILTER = ref_obj.scale_filter,
