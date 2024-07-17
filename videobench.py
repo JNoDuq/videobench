@@ -23,7 +23,7 @@ def common_create_file(file, tmp_path, loglevel):
 	fileobj.name, ext = os.path.splitext(filename)
 
 		### create a temp file and use the name for docker to map real file
-	tmpfile = tempfile.NamedTemporaryFile(prefix=tmp_path, delete=False)
+	tmpfile = tempfile.NamedTemporaryFile(prefix=tmp_path)
 	path, fileobj.map_filename = os.path.split(tmpfile.name)
 
 	return fileobj
@@ -49,7 +49,7 @@ def manage_ref_file(ref_file, tmp_path, loglevel):
 		ref_obj.resolution = [ffprobe_json['streams'][0]['width'], ffprobe_json['streams'][0]['height']]
 
 		make_packets_info(ref_obj, tmp_path, loglevel) ############################################################################### Bitrate from packets
-		data_json = json.load(open("{0}packets_{1}.json".format(tmp_path, ref_obj.name)))
+		data_json = json.load(open((tmp_path + ref_obj.json("packets"))))
 		pkt_size_list = []
 		for i in range(len(data_json['packets'])):
 			try:
@@ -59,7 +59,7 @@ def manage_ref_file(ref_file, tmp_path, loglevel):
 		ref_obj.pkt_size = pkt_size_list
 				
 		make_frames_info(ref_obj, tmp_path, loglevel)
-		data_json = json.load(open("{0}frames_{1}.json".format(tmp_path, ref_obj.name)))
+		data_json = json.load(open(tmp_path + ref_obj.json("frames")))
 		interlaced_frame_list = []
 		ref_obj.frame_size = []
 		for i in range(len(data_json['frames'])):
@@ -116,7 +116,7 @@ def manage_input_files(all_input, tmp_path, loglevel):
 	#p.map(call_frames_info, arguments)
 
 	for input_obj in list_input_obj:
-		data_json = json.load(open("{0}packets_{1}.json".format(tmp_path, input_obj.name)))
+		data_json = json.load(open(tmp_path + input_obj.json("packets")))
 		pkt_size_list = []
 		for i in range(len(data_json['packets'])):
 			try:
@@ -125,7 +125,7 @@ def manage_input_files(all_input, tmp_path, loglevel):
 				pass
 		input_obj.pkt_size = pkt_size_list
 		
-		data_json = json.load(open("{0}frames_{1}.json".format(tmp_path, input_obj.name)))
+		data_json = json.load(open(tmp_path + input_obj.json("frames")))
 		interlaced_frame_list = []
 		input_obj.frame_size = []
 		for i in range(len(data_json['frames'])):
@@ -237,16 +237,16 @@ if __name__ == '__main__':
 		for input_obj in list_input_obj: #################################################### read quality json 
 
 			try:
-				data_json = json.load(open("{0}quality_{1}.json".format( tmp_path , input_obj.name)))
+				data_json = json.load(open(tmp_path + input_obj.json("quality")))
 			except:
-				with open("{0}quality_{1}.json".format( tmp_path , input_obj.name), 'r') as file : #################### replace nan by 0
+				with open(tmp_path + input_obj.json("quality"), 'r') as file : #################### replace nan by 0
 					filedata = file.read()
 				# Replace the target string
 				filedata = filedata.replace("nan", "0")
 				# Write the file out again
-				with open("{0}quality_{1}.json".format( tmp_path , input_obj.name), 'w') as file:
+				with open(tmp_path + input_obj.json("quality"), 'w') as file:
 					file.write(filedata)
-				data_json = json.load(open("{0}quality_{1}.json".format( tmp_path , input_obj.name)))
+				data_json = json.load(open(tmp_path + input_obj.json("quality")))
 
 			vmaf_values = []
 			psnr_values = []
