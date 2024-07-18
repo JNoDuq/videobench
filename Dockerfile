@@ -23,23 +23,21 @@ RUN \
         python3-tk \
         yasm \
         pkg-config \
+        python3-venv \
         && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists
 
 
-# install python requirements
-        RUN pip3 install --upgrade pip
-        RUN pip3 install --no-cache-dir meson cython numpy
-
-# setup environment
-        ENV PATH=/vmaf:/vmaf/libvmaf/build/tools:$PATH
 
 
 RUN \
         mkdir /tmp/vmaf \
         && cd /tmp/vmaf \
         && git clone https://github.com/Netflix/vmaf.git . \
+        && python3 -mvenv .venv \
+        && .venv/bin/pip install --upgrade pip \
+        && .venv/bin/pip install --no-cache-dir meson cython numpy setuptools \
         && make \
         && make install \
         && cp -r ./model /usr/local/share/ \
