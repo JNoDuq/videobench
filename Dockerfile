@@ -43,12 +43,22 @@ RUN \
         && cp -r ./model /usr/local/share/ \
         && rm -r /tmp/vmaf
 
+RUN \
+        mkdir /tmp/dav1d \
+        && cd /tmp/dav1d \
+        && git clone https://code.videolan.org/videolan/dav1d.git . \
+        && python3 -mvenv .venv \
+        && .venv/bin/pip install --upgrade pip \
+        && .venv/bin/pip install --no-cache-dir meson \
+        && mkdir build && cd build && ../.venv/bin/meson .. \
+        && ninja && ninja install \
+        && rm -rf /tmp/dav1d
 
 RUN \
         mkdir /tmp/ffmpeg \
         && cd /tmp/ffmpeg \
         && git clone https://git.ffmpeg.org/ffmpeg.git . \
-        && ./configure --enable-libvmaf --enable-version3 --pkg-config-flags="--static" \
+        && ./configure --enable-libvmaf --enable-version3 --enable-libdav1d --pkg-config-flags="--static" \
         && make -j 8 install \
         && rm -r /tmp/ffmpeg
 
