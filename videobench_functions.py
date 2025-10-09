@@ -15,7 +15,7 @@ import multiprocessing
 
 container_tmp_path ="/home/shared-vmaf/"
 tmp_path = "/tmp/videobench/"
-docker_cmd = "docker container run --rm  -v {}:{} docker-videobench".format(tmp_path, container_tmp_path)
+docker_cmd = "podman container run --rm  -v {}:{} docker-videobench".format(tmp_path, container_tmp_path)
 
 class videoFileInfos(object):
 	def __init__(self,

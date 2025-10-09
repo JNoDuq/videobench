@@ -29,15 +29,9 @@ Video Bench is a tool that makes it easy to compare transcoded video files with 
 
 ### Install prerequisites on Linux
 
-#### Install Docker
+#### Install Podman
 
-[Install Docker](https://docs.docker.com/)
-
-#### Make sure you can run a docker container 
-
-```
-sudo usermod -a -G docker $USER
-```
+[Install Podman](https://podman.io/)
 
 #### Install python3
 
@@ -45,18 +39,18 @@ sudo usermod -a -G docker $USER
 sudo apt-get install python3
 ```
 
-#### Install pyside2
+#### Install pyside
 
 ```
 sudo apt-get install python3-pip
-pip3 install pyside2
+pip3 install pyside6
 ```
 
 ### Install prerequisites on Mac OS 
 
 #### Install Docker
 
-[Install Docker](https://docs.docker.com/)
+[Install Podman](https://podman.io/)
 
 #### Install python3
 
@@ -64,30 +58,30 @@ pip3 install pyside2
 brew install python3
 ```
 
-#### Install pyside2
+#### Install pyside6
 
 ```
 brew install python3-pip
-pip3 install pyside2
+pip3 install pyside6
 ```
 
 ### Install prerequisites on Windows 
 
 #### Install Docker
 
-For be able to use Docker on windows you need to have Windows 10 64bit Pro, Enterprise or Education
+For be able to use Podman on windows you need WSLv2 (Windows Subsystem for Linux)
 
-[Install Docker](https://docs.docker.com/)
+[Install Podman](https://podman.io/)
 
 #### Install python3
 
 [Install python3](https://www.python.org/downloads/windows/)
 Don't forget to click on "add python to PATH"
 
-#### Install pyside2
+#### Install pyside6
 
 ```
-pip install pyside2
+pip install pyside6
 ```
 
 ### Create docker container
@@ -96,7 +90,7 @@ Download or clone the repo
 
 ```
 cd videobench
-docker build -t  docker-videobench -f ./Dockerfile ./
+podman build -t  docker-videobench -f ./Dockerfile ./
 ```
 
 ## How to use it
