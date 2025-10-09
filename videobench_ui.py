@@ -8,10 +8,10 @@ from subprocess import Popen, PIPE
 import subprocess
 from functools import partial
 from datetime import datetime
-from PySide2 import QtGui, QtWidgets, QtCore
-from PySide2.QtCore import QPoint, Qt, QProcess
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCharts import QtCharts
+from PySide6 import QtGui, QtWidgets, QtCore
+from PySide6.QtCore import QPoint, Qt, QProcess
+from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6  import QtCharts
 from videobench_layout import Ui_fenetrePrincipale
 from videobench_functions import videoFileInfos
 import copy

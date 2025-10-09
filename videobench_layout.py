@@ -1,8 +1,8 @@
-from PySide2 import QtGui, QtWidgets, QtCore
+from PySide6 import QtGui, QtWidgets, QtCore
 from functools import partial
-from PySide2.QtCharts import QtCharts
-from PySide2.QtCore import QPoint, Qt
-from PySide2.QtGui import QPainter
+from PySide6  import QtCharts
+from PySide6.QtCore import QPoint, Qt
+from PySide6.QtGui import QPainter
 
 class Ui_fenetrePrincipale(object):
     def setupUi(self, mainWindow):

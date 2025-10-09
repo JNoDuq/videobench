@@ -5,11 +5,11 @@ import json
 import operator
 import sys
 
-from PySide2 import QtGui, QtWidgets, QtCore     ############# If you are not using the GUI , you can remove this block of import
-from PySide2.QtCore import QPoint, Qt
-from PySide2.QtGui import QPainter
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCharts import QtCharts
+from PySide6 import QtGui, QtWidgets, QtCore     ############# If you are not using the GUI , you can remove this block of import
+from PySide6.QtCore import QPoint, Qt
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6  import QtCharts
 import multiprocessing
 
 
