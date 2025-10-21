@@ -8,10 +8,10 @@ from subprocess import Popen, PIPE
 import subprocess
 from functools import partial
 from datetime import datetime
-from PySide2 import QtGui, QtWidgets, QtCore
-from PySide2.QtCore import QPoint, Qt, QProcess
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCharts import QtCharts
+from PySide6 import QtGui, QtWidgets, QtCore
+from PySide6.QtCore import QPoint, Qt, QProcess
+from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6  import QtCharts
 from videobench_layout import Ui_fenetrePrincipale
 from videobench_functions import videoFileInfos
 import copy
@@ -71,7 +71,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 				
 	def get_refFileName(self):
 
-		self.ref_path = QtWidgets.QFileDialog.getOpenFileName(self, ("Open Reference File"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265);; All files (*.*)"))[0]
+		self.ref_path = QtWidgets.QFileDialog.getOpenFileName(self, ("Open Reference File"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265 *.webm *.mkv);; All files (*.*)"))[0]
 		self.create_refCheckBox()
 
 	def create_refCheckBox(self): 
@@ -90,7 +90,7 @@ class VideoAnalyzer(QtWidgets.QWidget, Ui_fenetrePrincipale):
 			self.refCheckbox_dict[filename].clicked.connect(partial(self.add_lineSeries, self.refCheckbox_dict[filename]))
 
 	def get_inputFileNames(self):
-		list_input = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265);; All files (*.*)"))[0]
+		list_input = QtWidgets.QFileDialog.getOpenFileNames(self, ("Open Test Files"),self.currentPath,("Video files (*.mp4 *.ts *.ismv *.mov *.mp2 *.mxf *.h264 *.h265 *.webm *.mkv);; All files (*.*)"))[0]
 
 		for input_file in list_input: 
 			if input_file not in self.inputPath_list:

@@ -21,16 +21,18 @@ RUN \
         python3-setuptools \
         python3-wheel \
         python3-tk \
+	python3-venv \
         yasm \
         pkg-config \
+	libdav1d-dev \
         && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists
 
 
 # install python requirements
-        RUN pip3 install --upgrade pip
-        RUN pip3 install --no-cache-dir meson cython numpy
+        #RUN pip3 install --upgrade pip  --break-system-packages
+        RUN pip3 install --no-cache-dir meson cython numpy  --break-system-packages
 
 # setup environment
         ENV PATH=/vmaf:/vmaf/libvmaf/build/tools:$PATH
@@ -40,7 +42,8 @@ RUN \
         mkdir /tmp/vmaf \
         && cd /tmp/vmaf \
         && git clone https://github.com/Netflix/vmaf.git . \
-        && make \
+	&& sed -i 's/python3\.10/python3/g' Makefile \
+        && make PYTHON=python3 PYTHON_ECEX=python3\
         && make install \
         && cp -r ./model /usr/local/share/ \
         && rm -r /tmp/vmaf
@@ -50,7 +53,7 @@ RUN \
         mkdir /tmp/ffmpeg \
         && cd /tmp/ffmpeg \
         && git clone https://git.ffmpeg.org/ffmpeg.git . \
-        && ./configure --enable-libvmaf --enable-version3 --pkg-config-flags="--static" \
+        && ./configure --enable-libdav1d --enable-libvmaf --enable-version3 --pkg-config-flags="--static" \
         && make -j 8 install \
         && rm -r /tmp/ffmpeg
 
